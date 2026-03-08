@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Prism: Explorer v1.1</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; font-family: 'Courier New', monospace; }
+        #canvas-container { width: 100vw; height: 100vh; }
+        
+        /* HUD State Snapshot - For Debugging/Verification */
+        #explorer-snapshot {
+            position: absolute; top: 10px; left: 10px; 
+            background: rgba(0, 5, 10, 0.9); 
+            color: #0f0; padding: 15px; 
+            border: 1px solid #0f0;
+            font-size: 12px; line-height: 1.5;
+            z-index: 1000; pointer-events: none;
+            box-shadow: 0 0 15px rgba(0,255,0,0.2);
+        }
+
+        /* Floating Calendly Trigger */
+        #calendly-icon {
+            position: absolute; top: 20px; right: 20px;
+            width: 45px; height: 45px; border-radius: 50%;
+            background: #4db8ff; color: #000;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 20px; font-weight: bold;
+            box-shadow: 0 0 20px rgba(77,184,255,0.5);
+            transition: transform 0.2s;
+        }
+        #calendly-icon:hover { transform: scale(1.1); }
+    </style>
+</head>
+<body>
+
+<div id="explorer-snapshot"></div>
+<div id="calendly-icon" onclick="explorer.launchCalendly()">📅</div>
+<div id="canvas-container"></div>
+
+<script>
+
+
+class Explorer {
+    constructor(cliString = "") {
+        this.config = this._parseCLI(cliString);
+        
+        // The Master Trip List (Enumerated)
+        this.trips = [
+            { id: 'balkans', label: 'Balkans/Med (Monaco)', active: false },
+            { id: 'indochina', label: 'Indochina', active: false },
+            { id: 'indonesia', label: 'Indonesia', active: true }, // Current Focus
+            { id: 'central-asia', label: 'Central Asia', active: false }
+        ];
+
+        this.state = {
+            hat: this.config.hat || 'Sam-E',
+            zoom: 'Macro', // Start at the Swipe level
+            currentTripIndex: 2, // Default to Indonesia
+            breadcrumb: ['Galaxy'],
+            isTransitioning: false
+        };
+
+        this.initHUD();
+        this.renderMacroCarousel();
+    }
+
+    // This handles the "Swiping arrival"
+    nextTrip() {
+        this.state.currentTripIndex = (this.state.currentTripIndex + 1) % this.trips.length;
+        this.updateHUD();
+        this.updateCarouselVisuals();
+    }
+
+    // Triggered when "Indonesia" is selected
+    engagePrism() {
+        if(this.trips[this.state.currentTripIndex].id === 'indonesia') {
+            this.state.zoom = 'Mid-Scale';
+            this.state.breadcrumb.push('Indonesia');
+            this.renderIndonesianJourneys(); // This overlays the SVG and Blue/Red paths
+  
+constructor(cliString = "") {
+        this.config = this._parseCLI(cliString);
+        this.title = this.config.title || "The Prism Engine";
+        
+        // Internal State (The Breadcrumb mechanism)
+        this.state = {
+            hat: this.config.hat || 'Sam-E',
+            zoom: this.config.zoom || 'Macro',
+            breadcrumb: ['Galaxy'],
+            currentCoord: { lat: -6.2, lon: 106.8 }, // Default to Jakarta
+            debug: this.config.debug !== "false"
+        };
+
+        // Prism Themes
+        this.themes = {
+            'Sam-E': { color: 0x00d4ff, glow: '#00d4ff', label: 'Meditative' },
+            'Pete-G': { color: 0xff4d4d, glow: '#ff4d4d', label: 'Critical' }
+        };
+
+        this.initScene();
+        this.updateHUD();
+    }
+
+    _parseCLI(str) {
+        const args = {};
+        const matches = str.matchAll(/--(\w+)\s+([^--]*)/g);
+        for (const match of matches) {
+            args[match[1]] = match[2].trim();
+        }
+        return args;
+    }
+
+    initScene() {
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(this.renderer.domElement);
+
+        // Ambient Light for the "Prism" glow
+        const light = new THREE.PointLight(this.themes[this.state.hat].color, 1, 100);
+        light.position.set(10, 10, 10);
+        this.scene.add(light);
+
+        // Anchor Data (Indonesia Leaf Nodes)
+        this.createNode("Jakarta", -6.2088, 106.8456, "Sea Anchor");
+        this.createNode("Surabaya", -7.2575, 112.7521, "Sea Hub");
+        this.createNode("Monaco", 43.7384, 7.4246, "Crony High-Weight");
+
+        this.camera.position.z = 30;
+        this.animate();
+    }
+
+    createNode(name, lat, lon, meta) {
+        const geo = new THREE.SphereGeometry(0.5, 16, 16);
+        const mat = new THREE.MeshBasicMaterial({ 
+            color: this.themes[this.state.hat].color, 
+            wireframe: true 
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        
+        // Simple 2D projection for first attempt
+        mesh.position.set((lon - 110) * 0.5, (lat + 5) * 0.5, 0);
+        this.scene.add(mesh);
+    }
+
+    updateHUD() {
+        const hud = document.getElementById('explorer-snapshot');
+        const theme = this.themes[this.state.hat];
+        hud.innerHTML = `
+            <strong style="color:${theme.glow}">[EXPLORER SNAPSHOT]</strong><br>
+            Title: ${this.title}<br>
+            Hat: ${this.state.hat} (${theme.label})<br>
+            Zoom: ${this.state.zoom}<br>
+            Path: ${this.state.breadcrumb.join(' > ')}<br>
+            ---------------------------<br>
+            Calendly Var (a1): ${this.state.breadcrumb.join('|')}<br>
+            Calendly Var (a2): ${this.config.query || 'None'}
+        `;
+    }
+
+    launchCalendly() {
+        const path = encodeURIComponent(this.state.breadcrumb.join('|'));
+        const url = `https://calendly.com/pete-maben/invite?a1=${path}&a2=${this.state.hat}`;
+        window.open(url, '_blank');
+    }
+
+    animate() {
+        requestAnimationFrame(() => this.animate());
+        this.renderer.render(this.scene, this.camera);
+    }
+}
+
+}<br>
+            <small>Drag to swipe between Trips</small>
+        `;
+    }
+}
+
+//class Explorer {
+    
+
+
+// CONSTRUCTOR: The Headless CLI
+// This is where you configure the state before the page runs.
+const explorer = new Explorer("--title Indonesia_Explorer --hat Sam-E --zoom Indonesia --query Sea_Roads_Advice --debug true");
+</script>
+
+</body>
+</html>

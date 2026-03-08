@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Additive Synthesis Oscillator</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f4f8; }
+        .app-container { 
+            background-color: #ffffff; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); 
+            padding: 40px; text-align: center; width: 400px; 
+        }
+        
+        /* Display */
+        .frequency-display { font-size: 3.5em; font-weight: 700; color: #007bff; margin-bottom: 5px; line-height: 1; }
+        .unit { font-size: 0.4em; color: #555; vertical-align: super; }
+        .description { font-size: 1em; color: #333; margin-bottom: 20px; font-style: italic; }
+        
+        /* Status & Controls */
+        #status-text { font-weight: bold; letter-spacing: 2px; margin-top: 5px; margin-bottom: 30px; transition: color 0.3s; }
+        .active { color: #28a745; }
+        .inactive { color: #dc3545; }
+
+        .mixer-group { background-color: #f7f7f7; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .control-row { display: flex; align-items: center; margin-bottom: 15px; }
+        .control-label { width: 100px; text-align: left; font-weight: 600; color: #555; font-size: 0.9em; }
+        .control-slider { flex-grow: 1; margin: 0 10px; }
+        
+        input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background: #ddd; border-radius: 4px; outline: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; background: #007bff; border-radius: 50%; cursor: pointer; }
+        
+        .power-button { 
+            color: white; border: none; padding: 10px 30px; border-radius: 25px; 
+            cursor: pointer; font-weight: bold; font-size: 1.1em; transition: background-color 0.3s;
+        }
+        .power-on { background-color: #dc3545; }
+        .power-off { background-color: #28a745; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="frequency-display">528<span class="unit">Hz</span></div>
+        <div class="description">Additive Synthesizer (Sleep & Restoration Tone)</div>
+        
+        <p id="status-text" class="inactive">OSCILLATOR INACTIVE</p>
+
+        <div class="mixer-group">
+            <h3>Harmonic Mixer</h3>
+            
+            <div class="control-row">
+                <div class="control-label">Fundamental (1x)</div>
+                <input type="range" min="0" max="100" value="70" id="gain1-slider" class="control-slider">
+            </div>
+            
+            <div class="control-row">
+                <div class="control-label">2nd Harmonic (2x)</div>
+                <input type="range" min="0" max="100" value="40" id="gain2-slider" class="control-slider">
+            </div>
+
+            <div class="control-row">
+                <div class="control-label">3rd Harmonic (3x)</div>
+                <input type="range" min="0" max="100" value="20" id="gain3-slider" class="control-slider">
+            </div>
+        </div>
+
+        <div class="mixer-group">
+            <h3>Phasing/Time Shift</h3>
+            <div class="control-row">
+                <div class="control-label">Detune (Cents)</div>
+                <input type="range" min="0" max="10" value="0" id="detune-slider" class="control-slider">
+            </div>
+            <div class="description" style="margin-bottom: 0;">Adjusts the time shift between harmonics.</div>
+        </div>
+
+        <button id="power-button" class="power-off">START TONE</button>
+    </div>
+
+    <script>
+        // --- Web Audio API Setup ---
+        const FUNDAMENTAL_FREQ = 528;
+        let audioContext;
+        let oscillators = []; // Array to hold [F0, 2*F0, 3*F0] oscillators
+        let gainNodes = [];   // Array to hold [Gain1, Gain2, Gain3] gain controllers
+        let masterGain = null;
+        let isRunning = false;
+
+        // --- DOM Elements ---
+        const powerButton = document.getElementById('power-button');
+        const statusText = document.getElementById('status-text');
+        const gainSliders = [
+            document.getElementById('gain1-slider'),
+            document.getElementById('gain2-slider'),
+            document.getElementById('gain3-slider')
+        ];
+        const detuneSlider = document.getElementById('detune-slider');
+
+
+        // --- Core Functions ---
+
+        function updateStatus(active) {
+            isRunning = active;
+            if (active) {
+                powerButton.textContent = 'STOP TONE';
+                powerButton.className = 'power-button power-on';
+                statusText.textContent = 'OSCILLATOR ACTIVE';
+                statusText.className = 'active';
+            } else {
+                powerButton.textContent = 'START TONE';
+                powerButton.className = 'power-button power-off';
+                statusText.textContent = 'OSCILLATOR INACTIVE';
+                statusText.className = 'inactive';
+            }
+        }
+
+        function createOscillators() {
+            // Frequencies for the three oscillators
+            const frequencies = [
+                FUNDAMENTAL_FREQ,       // 1st Harmonic (Fundamental)
+                FUNDAMENTAL_FREQ * 2,   // 2nd Harmonic (Octave)
+                FUNDAMENTAL_FREQ * 3    // 3rd Harmonic (Perfect Fifth)
+            ];
+
+            // Master Gain to prevent clipping and control overall volume
+            masterGain = audioContext.createGain();
+            masterGain.gain.setValueAtTime(0.5, audioContext.currentTime); // Overall volume cap
+            masterGain.connect(audioContext.destination);
+
+            oscillators = [];
+            gainNodes = [];
+
+            frequencies.forEach((freq, index) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                // Configure Oscillator
+                osc.type = 'sine'; // Use pure sine waves for clean additive synthesis
+                osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+
+                // Initial Gain (volume)
+                const sliderValue = gainSliders[index].value / 100;
+                gain.gain.setValueAtTime(sliderValue, audioContext.currentTime);
+
+                // Connection: Oscillator -> Gain -> Master Gain
+                osc.connect(gain);
+                gain.connect(masterGain);
+
+                oscillators.push(osc);
+                gainNodes.push(gain);
+            });
+            
+            // Apply initial detune
+            handleDetuneChange();
+        }
+
+        function startOscillator() {
+            if (isRunning) return;
+
+            // Initialize Audio Context (needed for user interaction policy)
+            audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Create and connect all components
+            createOscillators();
+            
+            // Start all oscillators
+            oscillators.forEach(osc => osc.start());
+            updateStatus(true);
+        }
+
+        function stopOscillator() {
+            if (!isRunning) return;
+
+            // Use a short ramp down on the master gain to avoid clicks/pops
+            masterGain.gain.setValueAtTime(masterGain.gain.value, audioContext.currentTime);
+            masterGain.gain.linearRampToValueAtTime(0.0001, audioContext.currentTime + 0.05);
+
+            // Wait a moment then stop the source and clean up
+            oscillators.forEach(osc => osc.stop(audioContext.currentTime + 0.05));
+            oscillators = [];
+            gainNodes = [];
+            masterGain = null;
+
+            updateStatus(false);
+        }
+
+        function handlePowerToggle() {
+            if (!isRunning) {
+                startOscillator();
+            } else {
+                stopOscillator();
+            }
+        }
+
+        function handleGainChange(index) {
+            if (gainNodes[index]) {
+                // Map slider value (0-100) to gain (0-1.0)
+                const newGain = gainSliders[index].value / 100;
+                gainNodes[index].gain.setValueAtTime(newGain, audioContext.currentTime);
+            }
+        }
+
+        function handleDetuneChange() {
+            if (!audioContext) return;
+            
+            const detuneCents = parseFloat(detuneSlider.value);
+            
+            // Apply detune to the 2nd and 3rd harmonics (partials)
+            // The F0 (index 0) is kept at 0 cents for the reference pitch
+            if (oscillators[1]) {
+                oscillators[1].detune.setValueAtTime(detuneCents, audioContext.currentTime);
+            }
+            if (oscillators[2]) {
+                // Apply a slightly different detune for a richer chorus effect
+                oscillators[2].detune.setValueAtTime(detuneCents * 1.5, audioContext.currentTime); 
+            }
+        }
+
+        // --- Event Listeners ---
+        powerButton.addEventListener('click', handlePowerToggle);
+        
+        gainSliders.forEach((slider, index) => {
+            // Initial volume setting
+            handleGainChange(index); 
+            slider.addEventListener('input', () => handleGainChange(index));
+        });
+
+        detuneSlider.addEventListener('input', handleDetuneChange);
+
+    </script>
+</body>
+</html>

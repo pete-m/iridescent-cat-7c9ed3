@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LinkScope: The DOJ Epstein Files (JMail Edition)</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style type="text/css">
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 20px; }
+        #linkscope-interface { width: 100%; height: 700px; border: 2px solid #333; background-color: white; border-radius: 8px; }
+        .legend { margin-top: 10px; padding: 10px; background: #fff; border: 1px solid #ccc; display: inline-block; }
+        .legend-item { display: flex; align-items: center; margin-bottom: 5px; }
+        .color-box { width: 20px; height: 10px; margin-right: 10px; border: 1px solid #000; }
+        h2 { color: #2c3e50; }
+    </style>
+</head>
+<body>
+
+<h2>LinkScope: Systemic Influence Mapping (DOJ Epstein Files)</h2>
+<p>Mapping relationships extracted via JMail and DOJ Transparency Act releases. <b>Drag nodes to explore; scroll to zoom.</b></p>
+
+<div id="linkscope-interface"></div>
+
+<div class="legend">
+    <strong>Relationship Categories (Edges):</strong>
+    <div class="legend-item"><div class="color-box" style="background: #e74c3c;"></div> High-Volume Email (JMail)</div>
+    <div class="legend-item"><div class="color-box" style="background: #27ae60;"></div> Financial/Asset Tie</div>
+    <div class="legend-item"><div class="color-box" style="background: #2980b9;"></div> Political Strategy/Advice</div>
+    <div class="legend-item"><div class="color-box" style="background: #8e44ad;"></div> Investigative/Legal Link</div>
+</div>
+
+<script type="text/javascript">
+    var nodes = new vis.DataSet([
+        {id: 1, label: 'Jeffrey Epstein', group: 'Core', color: '#34495e', font: {color: 'white', size: 20}},
+        {id: 2, label: 'Ghislaine Maxwell', group: 'Associate', color: '#7f8c8d'},
+        
+        // Political & Strategy
+        {id: 3, label: 'Steve Bannon', group: 'Political', color: '#2980b9'},
+        {id: 4, label: 'Peter Mandelson', group: 'Political', color: '#2980b9'},
+        
+        // Business & Tech
+        {id: 5, label: 'Bill Gates', group: 'Business', color: '#27ae60'},
+        {id: 6, label: 'Elon Musk', group: 'Business', color: '#27ae60'},
+        {id: 7, label: 'Richard Branson', group: 'Business', color: '#27ae60'},
+        
+        // Royal/International
+        {id: 8, label: 'Prince Andrew', group: 'International', color: '#d35400'},
+        
+        // Investigative Nodes
+        {id: 9, label: 'DOJ / FBI Files', group: 'Evidence', shape: 'database', color: '#f1c40f'},
+        {id: 10, label: 'JMail Archive', group: 'Evidence', shape: 'database', color: '#f1c40f'}
+    ]);
+
+    var edges = new vis.DataSet([
+        // Emails (Red)
+        {from: 1, to: 3, label: 'Political Strategy (2018)', color: '#e74c3c', width: 4},
+        {from: 1, to: 4, label: 'Friendship Support Emails', color: '#e74c3c', width: 3},
+        {from: 1, to: 7, label: 'PR Strategy Advice', color: '#e74c3c', width: 2},
+        
+        // Financial (Green)
+        {from: 1, to: 5, label: 'Financial Exchanges', color: '#27ae60', width: 3},
+        {from: 1, to: 8, label: 'Shared Assets/Travel', color: '#27ae60', width: 5},
+        
+        // Political/Advice (Blue)
+        {from: 3, to: 1, label: 'European Tour Strategy', color: '#2980b9', width: 3},
+        {from: 4, to: 1, label: 'Image Rehabilitation', color: '#2980b9', width: 2},
+        
+        // Evidence Links (Purple/Gold)
+        {from: 9, to: 1, label: '3M+ Document Dump', color: '#8e44ad', dashes: true},
+        {from: 10, to: 1, label: 'Email Recreation', color: '#8e44ad', width: 2},
+        {from: 10, to: 4, label: 'Mandelson Correspondence', color: '#8e44ad', width: 1}
+    ]);
+
+    var container = document.getElementById('linkscope-interface');
+    var data = { nodes: nodes, edges: edges };
+    var options = {
+        nodes: { shape: 'dot', size: 16, font: { size: 14 } },
+        edges: { font: { align: 'top', size: 10 }, arrows: 'to' },
+        physics: { stabilization: true, barnesHut: { gravitationalConstant: -8000 } }
+    };
+    var network = new vis.Network(container, data, options);
+</script>
+
+</body>
+</html>

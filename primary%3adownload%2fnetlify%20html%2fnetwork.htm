@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relationship Explorer Network Graph</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style type="text/css">
+        #mynetwork {
+            width: 800px;
+            height: 600px;
+            border: 1px solid lightgray;
+        }
+    </style>
+</head>
+<body>
+
+<h3>Project: Content Drafts & Team Links (Inspired by Saved Data)</h3>
+<div id="mynetwork"></div>
+<p>Nodes are colored by type (Person/Content). Edge thickness represents **importance/impact**.</p>
+
+<script type="text/javascript">
+    // 1. DEFINE NODES (People and Content/Project Items)
+    var nodes = new vis.DataSet([
+        // People (blue)
+        {id: 1, label: 'Sam Etegal', group: 'Person', color: '#1E90FF'},
+        {id: 2, label: 'Content Strategist', group: 'Person', color: '#1E90FF'},
+        {id: 3, label: 'Developer/Design', group: 'Person', color: '#1E90FF'},
+        
+        // Content/Drafts (orange) - Referencing saved work
+        {id: 4, label: 'Sam Etegal Landing Page Draft', group: 'Content', color: '#FF8C00'},
+        {id: 5, label: 'Calendly Pre-Questionnaires', group: 'Content', color: '#FF8C00'},
+        {id: 6, label: 'Email Outreach Plan', group: 'Content', color: '#FF8C00'}
+    ]);
+
+    // 2. DEFINE EDGES (Relationships with varying thickness)
+    var edges = new vis.DataSet([
+        // Relationship Type 1: Direct Ownership/Creation (Thickest)
+        {from: 1, to: 4, label: 'Owns/Review', color: '#32CD32', width: 5},
+        
+        // Relationship Type 2: Content Generation/Drafting
+        {from: 2, to: 4, label: 'Drafted Content', color: '#DAA520', width: 3},
+        {from: 2, to: 5, label: 'Wrote Questions', color: '#DAA520', width: 3},
+        
+        // Relationship Type 3: Technical/Implementation (Medium)
+        {from: 3, to: 4, label: 'Prototype Implementation', color: '#8A2BE2', width: 2},
+        {from: 3, to: 6, label: 'Integration Support', color: '#8A2BE2', width: 2},
+
+        // Relationship Type 4: Supporting Strategy (Thinner)
+        {from: 1, to: 6, label: 'Approved Strategy', color: '#333333', width: 1},
+        {from: 2, to: 6, label: 'Created Plan', color: '#333333', width: 1}
+    ]);
+
+    // 3. INITIALIZE THE NETWORK
+    var container = document.getElementById('mynetwork');
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+        nodes: {
+            shape: 'dot',
+            size: 20,
+            font: {
+                size: 14,
+                color: '#333333'
+            },
+            borderWidth: 2
+        },
+        edges: {
+            smooth: {
+                enabled: true,
+                type: 'dynamic'
+            }
+        },
+        physics: {
+            enabled: true,
+            barnesHut: {
+                gravitationalConstant: -10000,
+                centralGravity: 0.3,
+                springLength: 95,
+                springConstant: 0.04,
+                damping: 0.09,
+                avoidOverlap: 0.1
+            },
+            solver: 'barnesHut',
+            stabilization: {
+                iterations: 250
+            }
+        }
+    };
+
+    var network = new vis.Network(container, data, options);
+    
+    // Add interaction to display link details on hover
+    network.on("hoverNode", function (params) {
+        // You can add code here to display node details on hover
+    });
+    network.on("click", function (params) {
+        if (params.nodes.length > 0) {
+            // Logic for clicking a node
+            // console.log('Clicked node: ' + nodes.get(params.nodes[0]).label);
+        }
+        if (params.edges.length > 0) {
+            // Logic for clicking an edge
+            // alert('Relationship Type: ' + edges.get(params.edges[0]).label);
+        }
+    });
+
+</script>
+
+</body>
+</html>
+    
