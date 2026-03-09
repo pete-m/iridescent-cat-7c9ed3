@@ -4,50 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LinkScope Nexus | March 2026</title>
-    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/standalone/umd/vis-network.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/hnldesign/mobileConsole@master/mobileConsole.min.js"></script>
+
     <style>
-        body { margin: 0; background: #05070a; color: #cfd8dc; font-family: 'Courier New', monospace; overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
-        #ticker-wrap { width: 100%; background: #962d22; padding: 12px 0; border-bottom: 3px solid #641e16; flex-shrink: 0; }
-        .ticker { display: inline-block; padding-left: 100%; animation: marquee 45s linear infinite; font-size: 13px; font-weight: 800; }
+        /* Force full height and prevent squeezing */
+        html, body { margin: 0; padding: 0; height: 100%; width: 100%; background: #05070a; overflow: hidden; display: flex; flex-direction: column; }
+        
+        /* Ticker Fix: Ensure horizontal scroll and no wrapping */
+        #ticker-wrap { background: #962d22; color: white; padding: 12px 0; border-bottom: 3px solid #641e16; flex-shrink: 0; width: 100%; overflow: hidden; }
+        .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; animation: marquee 40s linear infinite; font-family: monospace; font-size: 14px; font-weight: bold; }
         @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
-        #network-map { flex-grow: 1; background: #ffffff; width: 100%; }
-        #nexus-menu { position: fixed; bottom: 25px; left: 25px; z-index: 1001; }
-        .nexus-btn { background: #1c5982; color: white; border: none; padding: 15px 25px; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .nexus-content { display: none; position: absolute; bottom: 60px; left: 0; background: #0d1117; min-width: 260px; border: 1px solid #30363d; border-radius: 8px; }
-        .nexus-content a, .nexus-content button { color: #58a6ff; padding: 14px 20px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; background: none; width: 100%; text-align: left; border: none; cursor: pointer; }
+
+        /* Network Map: Must have explicit height/width to render */
+        #network-map { flex-grow: 1; width: 100%; background: #ffffff; position: relative; }
+
+        /* Menu Styling */
+        #nexus-menu { position: fixed; bottom: 20px; left: 20px; z-index: 9999; }
+        .nexus-btn { background: #1c5982; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .nexus-content { display: none; position: absolute; bottom: 55px; left: 0; background: #0d1117; min-width: 220px; border: 1px solid #30363d; border-radius: 8px; }
+        .nexus-content a, .nexus-content button { color: #58a6ff; padding: 12px 18px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; background: none; width: 100%; text-align: left; border: none; cursor: pointer; }
         .show { display: block; }
     </style>
 </head>
 <body>
 
-<div id="ticker-wrap"><div class="ticker">[MAR 9] LUTNICK VOLUNTARY INTERVIEW AGREED --- AG BONDI SUBPOENAED --- JMAIL RESTORATION ACTIVE</div></div>
+<div id="ticker-wrap">
+    <div class="ticker">
+        [MAR 9] LUTNICK VOLUNTARY INTERVIEW AGREED --- AG BONDI SUBPOENAED --- JMAIL RESTORATION ACTIVE --- TRADE ENVOY FILES PENDING ---
+    </div>
+</div>
+
 <div id="network-map"></div>
 
 <div id="nexus-menu">
     <div id="myDropdown" class="nexus-content">
         <a href="./netlify_html/univ_scale.htm">📊 Universal Scaler</a>
         <a href="./netlify_html/audio.html">🎙️ Audio Analysis</a>
-        <button onclick="mobileConsole.show()">🛠️ Open Dev Console</button>
+        <a href="./netlify_html/navigator.html">🧭 PG Navigator</a>
+        <button onclick="try{mobileConsole.show()}catch(e){alert('Console Script Blocked')}">🛠️ Open JS Console</button>
     </div>
-    <button onclick="toggleNexus()" class="nexus-btn">NEXUS DEV v3.2</button>
+    <button onclick="toggleNexus()" class="nexus-btn">NEXUS MAINTENANCE v3.3</button>
 </div>
 
 <script>
     function toggleNexus() { document.getElementById("myDropdown").classList.toggle("show"); }
-    
-    // Safety check for Mobile Console
+
+    // Use window.onload to ensure Vis.js is actually ready
     window.onload = function() {
-        console.log("LinkScope v3.2 Loaded on GitHub Pages");
-        if(typeof mobileConsole === 'undefined') {
-            alert("Console failed to load. Check internet connection.");
+        console.log("LinkScope v3.3 Initialising...");
+        
+        var container = document.getElementById('network-map');
+        
+        // Data for the main event
+        var nodes = new vis.DataSet([
+            {id: 1, label: 'Jeffrey Epstein', color: '#000', font:{color:'#fff'}, shape: 'diamond'},
+            {id: 2, label: 'Howard Lutnick', title: 'Commerce Sec.', color: '#3498db'},
+            {id: 3, label: 'Adfin Solutions', shape: 'triangle', color: '#e74c3c'},
+            {id: 4, label: 'Pam Bondi', title: 'Subpoenaed Mar 4', color: '#f39c12'}
+        ]);
+
+        var edges = new vis.DataSet([
+            {from: 1, to: 3, label: 'Partner'},
+            {from: 2, to: 3, label: 'Investor'},
+            {from: 4, to: 2, label: 'Inquiry', dashes: true}
+        ]);
+
+        var options = {
+            physics: { enabled: true, stabilization: true },
+            interaction: { zoomView: true, dragNodes: true }
+        };
+
+        try {
+            var network = new vis.Network(container, {nodes: nodes, edges: edges}, options);
+            console.log("Network Map Rendered Successfully");
+        } catch (err) {
+            console.error("Network Map Error: ", err);
         }
     };
-
-    var nodes = new vis.DataSet([{id: 1, label: 'Jeffrey Epstein', color: '#000', font:{color:'#fff'}, shape: 'diamond'}, {id: 2, label: 'Howard Lutnick', color: '#3498db'}]);
-    var edges = new vis.DataSet([{from: 1, to: 2, label: 'Adfin Partner'}]);
-    var container = document.getElementById('network-map');
-    var network = new vis.Network(container, {nodes: nodes, edges: edges}, { physics: { stabilization: true } });
 </script>
 </body>
 </html>
