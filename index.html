@@ -3,23 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkScope Nexus | March 2026</title>
-    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/hnldesign/mobileConsole@master/mobileConsole.min.js"></script>
-    <style>
-        body { margin: 0; background: #05070a; color: #cfd8dc; font-family: 'Courier New', monospace; overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
-        #ticker-wrap { width: 100%; background: #962d22; padding: 12px 0; border-bottom: 3px solid #641e16; flex-shrink: 0; }
-        .ticker { display: inline-block; padding-left: 100%; animation: marquee 45s linear infinite; font-size: 13px; font-weight: 800; }
-        @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
-        #network-map { flex-grow: 1; background: #ffffff; width: 100%; }
-        #nexus-menu { position: fixed; bottom: 25px; left: 25px; z-index: 1001; }
-        .nexus-btn { background: #1c5982; color: white; border: none; padding: 15px 25px; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .nexus-content { display: none; position: absolute; bottom: 60px; left: 0; background: #0d1117; min-width: 260px; <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkScope Nexus | JMail Stable v4.9</title>
+    <title>LinkScope Nexus | Stable v4.9.1</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/standalone/umd/vis-network.min.js" crossorigin="anonymous"></script>
     <style>
         body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #05070a; overflow: hidden; display: flex; flex-direction: column; }
@@ -30,31 +14,15 @@
         #nexus-menu { position: fixed; bottom: 20px; left: 20px; z-index: 9999; }
         .nexus-btn { background: #1c5982; color: white; border: 1px solid #34495e; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
         .nexus-content { display: none; position: absolute; bottom: 55px; left: 0; background: #0d1117; width: 230px; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; }
-        .nexus-content a, .nexus-content button { color: #58a6ff; padding: 12px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; background: none; width: 100%; text-align: left; cursor: pointer; }
+        .nexus-content a, .nexus-content button { color: #58a6ff; padding: 12px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; background: none; width: 100%; text-align: left; cursor: pointer; border: none; }
         .show { display: block; }
         .dev-header { background: #1c5982; color: white; padding: 8px; font-size: 10px; font-family: monospace; }
-        #debug-terminal { display:none; position:fixed; top:45px; left:0; width:100%; height:30%; background:rgba(0,0,0,0.9); color:#00ff00; font-family:monospace; font-size:11px; overflow-y:auto; z-index:10000; padding:10px; border-bottom:2px solid #e67e22; }
+        #debug-terminal { display:none; position:fixed; top:45px; left:0; width:100%; height:30%; background:rgba(0,0,0,0.95); color:#00ff00; font-family:monospace; font-size:11px; overflow-y:auto; z-index:10000; padding:10px; border-bottom:2px solid #e67e22; }
     </style>
 </head>
 <body>
 
-<div id="debug-terminal"><div>[NEXUS DEBUG LOG START]</div></div>
-<script>
-    window.toggleDebug = function() {
-        const term = document.getElementById('debug-terminal');
-        term.style.display = (term.style.display === 'none' || term.style.display === '') ? 'block' : 'none';
-    };
-    const term = document.getElementById('debug-terminal');
-    window.onerror = function(msg, url, line) {
-        term.style.display = 'block';
-        term.innerHTML += `<div style="color:red">! ERROR: ${msg} @ ${line}</div>`;
-    };
-    const originalLog = console.log;
-    console.log = function(msg) {
-        if(term) { term.innerHTML += `<div>> ${msg}</div>`; term.scrollTop = term.scrollHeight; }
-        originalLog.apply(console, arguments);
-    };
-</script>
+<div id="debug-terminal"><div>[NEXUS SYSTEM READY]</div></div>
 
 <div id="ticker-wrap"><div class="ticker">[MAR 9] JMAIL RESTORATION ACTIVE --- NODES VERIFIED --- TRADE ENVOY LIVE ---</div></div>
 
@@ -66,32 +34,25 @@
         <button onclick="loadProgram('andrew')" class="nexus-btn" style="background: #2c3e50;">🧭 Andrew</button>
     </div>
 
-    <button onclick="document.getElementById('dev_Dropdown').classList.toggle('show')" class="nexus-btn">dev</button>
+    <button onclick="document.getElementById('dev_Dropdown').classList.toggle('show')" class="nexus-btn">NEXUS DEV v4.9</button>
     <div id="dev_Dropdown" class="nexus-content">
         <div class="dev-header">CONTROL PANEL</div>
         <a href="./netlify_html/dev/univ_scale.html">📊 Universal Scaler</a>
         <a href="./netlify_html/dev/audio_analysis.html">🎙️ Audio Analysis</a>
+        <a href="./netlify_html/active/andrew_trade.html">🧭 Trade Envoy Data</a>
         <hr style="border:0; border-top:1px solid #333; margin:0;">
         <button onclick="toggleDebug()" style="color:#e67e22;">📟 Toggle Console</button>
         <button onclick="toggleMainEvent()" style="color:#f1c40f;">👁️ Toggle Display</button>
-        <button onclick="document.getElementById('dev_Dropdown').classList.remove('show')" style="color:#e74c3c;">Close</button>
+        <button onclick="document.getElementById('dev_Dropdown').classList.remove('show')" style="color:#e74c3c; border-top:1px solid #21262d;">Close</button>
     </div>
 </div>
 
 <script type="module">
-    import { initAndrew } from './netlify_html/active/andrew_trade.js';
-    import { initNetwork } from './netlify_html/active/network.js';
+    // Bind all functions to window to bypass module scope isolation
+    const term = document.getElementById('debug-terminal');
 
-    window.loadProgram = function(prog) {
-        const stage = 'network-map';
-        document.getElementById(stage).style.display = 'block';
-        console.log("Nexus Loading: " + prog);
-        
-        if (prog === 'andrew') initAndrew(stage);
-        if (prog === 'network') initNetwork(stage);
-        
-        const drop = document.getElementById('dev_Dropdown');
-        if (drop) drop.classList.remove('show');
+    window.toggleDebug = function() {
+        term.style.display = (term.style.display === 'none' || term.style.display === '') ? 'block' : 'none';
     };
 
     window.toggleMainEvent = function() {
@@ -99,68 +60,42 @@
         el.style.display = (el.style.display === 'none') ? 'block' : 'none';
     };
 
+    // Logging & Error Handling
+    const originalLog = console.log;
+    console.log = function(msg) {
+        if (typeof msg === 'string' && msg.includes('ResizeObserver')) return; // Mute noisy lib warnings
+        const line = document.createElement('div');
+        line.textContent = `> ${msg}`;
+        term.appendChild(line);
+        term.scrollTop = term.scrollHeight;
+        originalLog.apply(console, arguments);
+    };
+
+    // Imports
+    import { initAndrew } from './netlify_html/active/andrew_trade.js';
+    import { initNetwork } from './netlify_html/active/network.js';
+
+    window.loadProgram = function(prog) {
+        const stage = 'network-map';
+        document.getElementById(stage).style.display = 'block';
+        console.log("Nexus Boot: " + prog);
+        
+        try {
+            if (prog === 'andrew') initAndrew(stage);
+            if (prog === 'network') initNetwork(stage);
+        } catch (e) {
+            console.log("CRITICAL LOAD ERROR: " + e.message);
+        }
+        
+        document.getElementById('dev_Dropdown').classList.remove('show');
+    };
+
+    // Auto-Initialization
     window.addEventListener('load', () => {
-        console.log("Core Systems Online.");
+        console.log("Initializing JMail Infrastructure...");
         window.loadProgram('network'); 
     });
 </script>
 
-</body>
-</html>: 1px solid #30363d; border-radius: 8px; }
-        .nexus-content a, .nexus-content button { color: #58a6ff; padding: 14px 20px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; background: none; width: 100%; text-align: left; border: none; cursor: pointer; }
-        .show { display: block; }
-    </style>
-</head>
-<body>
-<div id="debug-terminal" style="display:block; position:fixed; top:50px; left:0; width:100%; height:30%; background:rgba(0,0,0,0.9); color:#00ff00; font-family:monospace; font-size:11px; overflow-y:auto; z-index:10000; padding:10px; border:2px solid #e67e22;">
-    <div>[DEBUG LOG START]</div>
-</div>
-
-<script>
-    // Force-capture all errors immediately
-    window.onerror = function(msg, url, line) {
-        const t = document.getElementById('debug-terminal');
-        t.innerHTML += `<div style="color:#ff4444;">! ERROR: ${msg} <br> at ${url}:${line}</div>`;
-        return false;
-    };
-    
-    // Mirror standard logs
-    const termElement = document.getElementById('debug-terminal');
-    const oldLog = console.log;
-    console.log = function(m) {
-        termElement.innerHTML += `<div>> ${m}</div>`;
-        termElement.scrollTop = termElement.scrollHeight;
-        oldLog.apply(console, arguments);
-    };
-</script>
-
-<div id="ticker-wrap"><div class="ticker">[MAR 9] LUTNICK VOLUNTARY INTERVIEW AGREED --- AG BONDI SUBPOENAED --- JMAIL RESTORATION ACTIVE</div></div>
-<div id="network-map"></div>
-
-<div id="nexus-menu">
-    <div id="myDropdown" class="nexus-content">
-        <a href="./netlify_html/univ_scale.htm">📊 Universal Scaler</a>
-        <a href="./netlify_html/audio.html">🎙️ Audio Analysis</a>
-        <button onclick="mobileConsole.show()">🛠️ Open Dev Console</button>
-    </div>
-    <button onclick="toggleNexus()" class="nexus-btn">NEXUS DEV v3.2</button>
-</div>
-
-<script>
-    function toggleNexus() { document.getElementById("myDropdown").classList.toggle("show"); }
-    
-    // Safety check for Mobile Console
-    window.onload = function() {
-        console.log("LinkScope v3.2 Loaded on GitHub Pages");
-        if(typeof mobileConsole === 'undefined') {
-            alert("Console failed to load. Check internet connection.");
-        }
-    };
-
-    var nodes = new vis.DataSet([{id: 1, label: 'Jeffrey Epstein', color: '#000', font:{color:'#fff'}, shape: 'diamond'}, {id: 2, label: 'Howard Lutnick', color: '#3498db'}]);
-    var edges = new vis.DataSet([{from: 1, to: 2, label: 'Adfin Partner'}]);
-    var container = document.getElementById('network-map');
-    var network = new vis.Network(container, {nodes: nodes, edges: edges}, { physics: { stabilization: true } });
-</script>
 </body>
 </html>
