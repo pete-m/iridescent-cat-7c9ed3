@@ -22,15 +22,29 @@
     <div id="ticker-wrap"><div class="ticker">[MAR 9] LUTNICK INTERVIEW --- BONDI SUBPOENAED --- TRADE ENVOY FILES LIVE ---</div></div>
     <div id="network-map"></div>
     <div id="nexus-menu">
-        <div id="myDropdown" class="nexus-content">
+      
+      <div id="dev_Dropdown" class="nexus-content">
+    <div style="background:#1c5982; padding:8px; font-size:10px;">CONTROL PANEL</div>
+    
          <span>color=blue
          Development</span> 
             <a href="./netlify_html/univ_scale.html">📊 Universal Scaler</a>
             <a href="./netlify_html/audio_analysis.html">🎙️ Audio Analysis</a>
             <a href="./netlify_html/andrew_trade.html">🧭 Trade Envoy Data</a>
         </div>
-        <button onclick="document.getElementById('myDropdown').classList.toggle('show')" class="nexus-btn">dev</button>
-    </div>
+        <button onclick="document.getElementById('dev_Dropdown').classList.toggle('show')" class="nexus-btn">dev</button>
+
+    <button onclick="loadProgram('network')">🕸️ Master Network</button>
+    <button onclick="loadProgram('andrew')">🧭 Trade Envoy (Andrew)</button>
+    
+    <hr style="border:0; border-top:1px solid #333;">
+    
+    <button onclick="toggleMainEvent()" style="color:#f1c40f;">👁️ Toggle Main Event</button>
+    <button onclick="document.getElementById('myDropdown').classList.remove('show')" style="color:#e74c3c;">Close</button>
+</div>    </div>
+      
+      
+      
     <script>
         window.onload = function() {
             if (typeof vis === 'undefined') {
