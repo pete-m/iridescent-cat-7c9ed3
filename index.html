@@ -20,24 +20,26 @@
 </head>
 <body>
     <div id="ticker-wrap"><div class="ticker">[MAR 9] LUTNICK INTERVIEW --- BONDI SUBPOENAED --- TRADE ENVOY FILES LIVE ---</div></div>
+    
+       //container
     <div id="network-map"></div>
+ 
     <div id="nexus-menu">
+      <button onclick="document.getElementById('dev_Dropdown').classList.toggle('show')" class="nexus-btn">dev</button>
       
       <div id="dev_Dropdown" class="nexus-content"  style="background:#1c5982; padding:8px; font-size:10px;">CONTROL PANEL
-      <span>color=blue;
-         Development</span> 
-            <a href="./netlify_html/univ_scale.html">📊 Universal Scaler</a>
-            <a href="./netlify_html/audio_analysis.html">🎙️ Audio Analysis</a>
-            <a href="./netlify_html/andrew_trade.html">🧭 Trade Envoy Data</a>
+      <span>color=blue Development</span>
+            <a href="./netlify_html/dev/univ_scale.html">📊 Universal Scaler</a>
+            <a href="./netlify_html/dev/audio_analysis.html">🎙️ Audio Analysis</a>
+            <a href="./netlify_html/active/andrew_trade.html">🧭 Trade Envoy Data</a>
         
-        <button onclick="document.getElementById('dev_Dropdown').classList.toggle('show')" class="nexus-btn">dev</button>
-
-    <button onclick="loadProgram(' ./netlify_htll/active/network.js')">🕸️ Master Network</button>
-    <button onclick="loadProgram(' ./netlify_htll/active/²'andrew.js')">🧭 Trade Envoy (Andrew)</button>
-    </div>
-    
+        
+</div>// end deop menu
+    <button onclick="loadProgram(' ./netlify_html/active/network.js')">🕸️ Master Network</button>
+    <button onclick="loadProgram(' ./netlify_html/active/²'andrew.js')">🧭 Trade Envoy (Andrew)</button>
+    </div>  
     <hr style="border:0; border-top:1px solid #333;">
-    
+   <div> 
     <button onclick="toggleMainEvent()" style="color:#f1c40f;">👁️ Toggle Main Event</button>
     <button onclick="document.getElementById('dev_Dropdown').classList.remove('show')" style="color:#e74c3c;">Close</button>
 </div>
