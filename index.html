@@ -74,7 +74,24 @@
     <script type="module">
         import { initAndrew } from './netlify_html/active/andrew_trade.js';
         import { initNetwork } from './netlify_html/active/network.js';
+window.toggleDebug = function() {
+    const term = document.getElementById('debug-terminal');
+    if(term) {
+        term.style.display = (term.style.display === 'none' || term.style.display === '') ? 'block' : 'none';
+    }
+};
 
+// This "mirrors" the browser console so you can see it on Android
+const logTarget = document.getElementById('debug-terminal');
+const originalLog = console.log;
+console.log = function(msg) {
+    if(logTarget) {
+        const entry = document.createElement('div');
+        entry.innerHTML = `> ${msg}`;
+        logTarget.appendChild(entry);
+    }
+    originalLog.apply(console, arguments);
+};
         // Attach to window so HTML buttons can see them
         window.loadProgram = function(prog) {
             const stage = 'network-map';
