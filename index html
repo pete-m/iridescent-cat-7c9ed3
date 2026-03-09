@@ -14,7 +14,99 @@
         #network-map { flex-grow: 1; background: #ffffff; width: 100%; }
         #nexus-menu { position: fixed; bottom: 25px; left: 25px; z-index: 1001; }
         .nexus-btn { background: #1c5982; color: white; border: none; padding: 15px 25px; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .nexus-content { display: none; position: absolute; bottom: 60px; left: 0; background: #0d1117; min-width: 260px; border: 1px solid #30363d; border-radius: 8px; }
+        .nexus-content { display: none; position: absolute; bottom: 60px; left: 0; background: #0d1117; min-width: 260px; <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkScope Nexus | JMail Stable v4.9</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/standalone/umd/vis-network.min.js" crossorigin="anonymous"></script>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #05070a; overflow: hidden; display: flex; flex-direction: column; }
+        #ticker-wrap { background: #962d22; height: 45px; border-bottom: 3px solid #641e16; overflow: hidden; display: flex; align-items: center; flex-shrink: 0; }
+        .ticker { white-space: nowrap; padding-left: 100%; animation: marquee 35s linear infinite; color: white; font-family: monospace; font-weight: bold; }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-200%); } }
+        #network-map { flex-grow: 1; background: #ffffff; width: 100%; }
+        #nexus-menu { position: fixed; bottom: 20px; left: 20px; z-index: 9999; }
+        .nexus-btn { background: #1c5982; color: white; border: 1px solid #34495e; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .nexus-content { display: none; position: absolute; bottom: 55px; left: 0; background: #0d1117; width: 230px; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; }
+        .nexus-content a, .nexus-content button { color: #58a6ff; padding: 12px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; background: none; width: 100%; text-align: left; cursor: pointer; }
+        .show { display: block; }
+        .dev-header { background: #1c5982; color: white; padding: 8px; font-size: 10px; font-family: monospace; }
+        #debug-terminal { display:none; position:fixed; top:45px; left:0; width:100%; height:30%; background:rgba(0,0,0,0.9); color:#00ff00; font-family:monospace; font-size:11px; overflow-y:auto; z-index:10000; padding:10px; border-bottom:2px solid #e67e22; }
+    </style>
+</head>
+<body>
+
+<div id="debug-terminal"><div>[NEXUS DEBUG LOG START]</div></div>
+<script>
+    window.toggleDebug = function() {
+        const term = document.getElementById('debug-terminal');
+        term.style.display = (term.style.display === 'none' || term.style.display === '') ? 'block' : 'none';
+    };
+    const term = document.getElementById('debug-terminal');
+    window.onerror = function(msg, url, line) {
+        term.style.display = 'block';
+        term.innerHTML += `<div style="color:red">! ERROR: ${msg} @ ${line}</div>`;
+    };
+    const originalLog = console.log;
+    console.log = function(msg) {
+        if(term) { term.innerHTML += `<div>> ${msg}</div>`; term.scrollTop = term.scrollHeight; }
+        originalLog.apply(console, arguments);
+    };
+</script>
+
+<div id="ticker-wrap"><div class="ticker">[MAR 9] JMAIL RESTORATION ACTIVE --- NODES VERIFIED --- TRADE ENVOY LIVE ---</div></div>
+
+<div id="network-map"></div>
+
+<div id="nexus-menu">
+    <div style="margin-bottom: 10px; display: flex; gap: 8px;">
+        <button onclick="loadProgram('network')" class="nexus-btn" style="background: #2c3e50;">🕸️ Master</button>
+        <button onclick="loadProgram('andrew')" class="nexus-btn" style="background: #2c3e50;">🧭 Andrew</button>
+    </div>
+
+    <button onclick="document.getElementById('dev_Dropdown').classList.toggle('show')" class="nexus-btn">dev</button>
+    <div id="dev_Dropdown" class="nexus-content">
+        <div class="dev-header">CONTROL PANEL</div>
+        <a href="./netlify_html/dev/univ_scale.html">📊 Universal Scaler</a>
+        <a href="./netlify_html/dev/audio_analysis.html">🎙️ Audio Analysis</a>
+        <hr style="border:0; border-top:1px solid #333; margin:0;">
+        <button onclick="toggleDebug()" style="color:#e67e22;">📟 Toggle Console</button>
+        <button onclick="toggleMainEvent()" style="color:#f1c40f;">👁️ Toggle Display</button>
+        <button onclick="document.getElementById('dev_Dropdown').classList.remove('show')" style="color:#e74c3c;">Close</button>
+    </div>
+</div>
+
+<script type="module">
+    import { initAndrew } from './netlify_html/active/andrew_trade.js';
+    import { initNetwork } from './netlify_html/active/network.js';
+
+    window.loadProgram = function(prog) {
+        const stage = 'network-map';
+        document.getElementById(stage).style.display = 'block';
+        console.log("Nexus Loading: " + prog);
+        
+        if (prog === 'andrew') initAndrew(stage);
+        if (prog === 'network') initNetwork(stage);
+        
+        const drop = document.getElementById('dev_Dropdown');
+        if (drop) drop.classList.remove('show');
+    };
+
+    window.toggleMainEvent = function() {
+        const el = document.getElementById('network-map');
+        el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+    };
+
+    window.addEventListener('load', () => {
+        console.log("Core Systems Online.");
+        window.loadProgram('network'); 
+    });
+</script>
+
+</body>
+</html>: 1px solid #30363d; border-radius: 8px; }
         .nexus-content a, .nexus-content button { color: #58a6ff; padding: 14px 20px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; background: none; width: 100%; text-align: left; border: none; cursor: pointer; }
         .show { display: block; }
     </style>
