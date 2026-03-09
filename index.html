@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkScope Nexus | Stable v3.8</title>
+    <title>LinkScope Nexus | Stable v4.4</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/standalone/umd/vis-network.min.js" crossorigin="anonymous"></script>
     <style>
         body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #05070a; overflow: hidden; display: flex; flex-direction: column; }
@@ -13,61 +13,67 @@
         #network-map { flex-grow: 1; background: #ffffff; width: 100%; }
         #nexus-menu { position: fixed; bottom: 20px; left: 20px; z-index: 9999; }
         .nexus-btn { background: #1c5982; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        .nexus-content { display: none; position: absolute; bottom: 55px; left: 0; background: #0d1117; width: 230px; border: 1px solid #30363d; border-radius: 8px; }
-        .nexus-content a { color: #58a6ff; padding: 14px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; }
+        .nexus-content { display: none; position: absolute; bottom: 55px; left: 0; background: #0d1117; width: 230px; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; }
+        .nexus-content a, .nexus-content button { color: #58a6ff; padding: 12px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; background: none; border-left: none; border-right: none; border-top: none; width: 100%; text-align: left; cursor: pointer; }
+        .nexus-content button:hover { background: #161b22; }
         .show { display: block; }
+        .dev-header { background: #1c5982; color: white; padding: 8px; font-size: 10px; font-family: monospace; }
+        .dev-tag { color: #3498db; display: block; padding: 4px 12px; font-size: 11px; }
     </style>
 </head>
 <body>
     <div id="ticker-wrap"><div class="ticker">[MAR 9] LUTNICK INTERVIEW --- BONDI SUBPOENAED --- TRADE ENVOY FILES LIVE ---</div></div>
     
-       //container
     <div id="network-map"></div>
  
     <div id="nexus-menu">
-      <button onclick="document.getElementById('dev_Dropdown').classList.toggle('show')" class="nexus-btn">dev</button>
+        <button onclick="document.getElementById('dev_Dropdown').classList.toggle('show')" class="nexus-btn">dev</button>
       
-      <div id="dev_Dropdown" class="nexus-content"  style="background:#1c5982; padding:8px; font-size:10px;">CONTROL PANEL
-      <span>color=blue Development</span>
+        <div id="dev_Dropdown" class="nexus-content">
+            <div class="dev-header">CONTROL PANEL</div>
+            <span class="dev-tag">Development Mode</span>
+            
             <a href="./netlify_html/dev/univ_scale.html">📊 Universal Scaler</a>
             <a href="./netlify_html/dev/audio_analysis.html">🎙️ Audio Analysis</a>
-            <a href="./netlify_html/active/andrew_trade.html">🧭 Trade Envoy Data</a>
-     end drop   
-        
-</div>
+            
+            <button onclick="loadProgram('network')">🕸️ Master Network</button>
+            <button onclick="loadProgram('andrew')">🧭 Trade Envoy (Andrew)</button>
+            
+            <hr style="border:0; border-top:1px solid #333; margin:0;">
+            
+            <button onclick="toggleMainEvent()" style="color:#f1c40f;">👁️ Toggle Main Event</button>
+            <button onclick="document.getElementById('dev_Dropdown').classList.remove('show')" style="color:#e74c3c;">Close</button>
+        </div>
+    </div>
 
-<div>
-    <button onclick="loadProgram(' ./netlify_html/active/network.js')">🕸️ Master Network</button>
-    <button onclick="loadProgram(' ./netlify_html/active/'andrew.js')">🧭 Trade Envoy (Andrew)</button>
-    </div>  
-    
-    
-    <hr style="border:0; border-top:1px solid #333;">
-   <div> 
-    <button onclick="toggleMainEvent()" style="color:#f1c40f;">👁️ Toggle Main Event</button>
-    <button onclick="document.getElementById('dev_Dropdown').classList.remove('show')" style="color:#e74c3c;">Close</button>
-</div>
-      
-  
-    <script>
-        window.onload = function() {
-            if (typeof vis === 'undefined') {
-                alert("CRITICAL: Network Engine Blocked by Browser.");
-                return;
-            }
-            var container = document.getElementById('network-map');
-            var nodes = new vis.DataSet([{id: 1, label: 'Epstein', shape: 'diamond'}, {id: 2, label: 'Lutnick'}]);
-            var edges = new vis.DataSet([{from: 1, to: 2}]);
-            new vis.Network(container, {nodes, edges}, {physics: {stabilization: true}});
+    <script type="module">
+        import { initAndrew } from './netlify_html/active/andrew_trade.js';
+        import { initNetwork } from './netlify_html/active/network.js';
+
+        // Attach to window so HTML buttons can see them
+        window.loadProgram = function(prog) {
+            const stage = 'network-map';
+            document.getElementById(stage).style.display = 'block';
+            
+            if (prog === 'andrew') initAndrew(stage);
+            if (prog === 'network') initNetwork(stage);
+            
+            document.getElementById('dev_Dropdown').classList.remove('show');
         };
-        ...
-</script>
-       <script type="module">
-    // The "./" is mandatory for relative paths on GitHub Pages
-    import { initAndrew } from './netlify_html/active/andrew_trade.js';
-    import { initNetwork } from './netlify_html/active/network.js';
 
-    // ... rest of your controller logic ..
+        window.toggleMainEvent = function() {
+            const el = document.getElementById('network-map');
+            el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'block' : 'none';
+        };
+
+        // Auto-populate on load
+        window.addEventListener('load', () => {
+            if (typeof vis === 'undefined') {
+                console.error("Vis.js not loaded");
+            } else {
+                window.loadProgram('network');
+            }
+        });
     </script>
 </body>
 </html>
