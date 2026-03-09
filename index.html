@@ -15,13 +15,16 @@
 
         /* Navigation & Nexus */
         #nexus-menu { position: fixed; bottom: 25px; left: 25px; z-index: 1001; }
-        .nexus-btn { background: #1c5982; color: white; border: none; padding: 15px 25px; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: 'Courier New', monospace; border-bottom: 4px solid #0d3b57; }
+        .nexus-btn { background: #1c5982; color: blue; border: none; padding: 15px 25px; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: 'Courier New', monospace; border-bottom: 4px solid #0d3b57; }
         .nexus-content { display: none; position: absolute; bottom: 60px; left: 0; background: #0d1117; min-width: 260px; border: 1px solid #30363d; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
         .nexus-content a { color: #58a6ff; padding: 14px 20px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; }
         .nexus-content a:hover { background: #161b22; color: #fff; }
         .show { display: block; }
 
         #network-map { width: 100vw; height: 100vh; background: #ffffff; }
+        
+        
+        
         
         /* Evidence Tooltip Style */
         .vis-tooltip { background-color: #161b22 !important; color: #fff !important; border: 1px solid #3498db !important; padding: 10px !important; border-radius: 4px !important; font-family: monospace !important; }
@@ -61,6 +64,12 @@
         
         
         
+        <div class="controls">
+    <div><span class="legend-dot" style="background:#e74c3c"></span> Business/Adfin Ties</div>
+    <div><span class="legend-dot" style="background:#3498db"></span> Political Strategy</div>
+    <div><span class="legend-dot" style="background:#f1c40f"></span> 2026 "Mistakenly Withheld" Files</div>
+</div>
+
 <div id="network-map"></div>
 
 <script>
