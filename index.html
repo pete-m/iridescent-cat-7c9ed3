@@ -29,6 +29,31 @@
     <div id="nexus-menu">
         <button onclick="document.getElementById('dev_Dropdown').classList.toggle('show')" class="nexus-btn">dev</button>
       
+      <div id="dev_Dropdown" class="nexus-content">
+    <div class="dev-header">CONTROL PANEL</div>
+    <span class="dev-tag">Development Mode</span>
+    
+    <a href="./netlify_html/dev/univ_scale.html">📊 Universal Scaler</a>
+    <a href="./netlify_html/dev/audio_analysis.html">🎙️ Audio Analysis</a>
+    
+    <hr style="border:0; border-top:1px solid #333; margin:0;">
+    
+    <button onclick="toggleDebug()" style="color:#e67e22;">📟 Show/Hide Console</button>
+    <button onclick="toggleMainEvent()" style="color:#f1c40f;">👁️ Toggle Main Event</button>
+    
+    <button onclick="document.getElementById('dev_Dropdown').classList.remove('show')" style="color:#e74c3c;">Close Menu</button>
+</div>
+      
+      
+
+    
+    <hr style="border:0; border-top:1px solid #333; margin:0;">
+    
+    <button onclick="toggleDebug()" style="color:#e67e22;">📟 Show/Hide Console</button>
+    <button onclick="toggleMainEvent()" style="color:#f1c40f;">👁️ Toggle Main Event</button>
+    
+    <button onclick="document.getElementById('dev_Dropdown').classList.remove('show')" style="color:#e74c3c;">Close Menu</button>
+</div>
         <div id="dev_Dropdown" class="nexus-content">
             <div class="dev-header">CONTROL PANEL</div>
             <span class="dev-tag">Development Mode</span>
