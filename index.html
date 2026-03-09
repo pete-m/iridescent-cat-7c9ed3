@@ -38,33 +38,44 @@
 </div>
 
 <div id="network-map"></div>
+
 <div id="nexus-menu">
     <div style="margin-bottom: 10px; display: flex; gap: 8px;">
         <button onclick="window.loadProgram('network')" class="nexus-btn" style="background: #2c3e50;">🕸️ Master</button>
         <button onclick="window.loadProgram('andrew')" class="nexus-btn" style="background: #2c3e50;">🧭 Andrew</button>
     </div>
 
-    <button onclick="document.getElementById('dev_Dropdown').classList.toggle('show')" class="nexus-btn">NEXUS DEV v4.9.2</button>
-    <div id="dev_Dropdown" class="nexus-content">
-        <div class="dev-header">CONTROL PANEL</div>
-        <a href="./netlify_html/dev/univ_scale.html">📊 Universal Scaler</a>
-        <a href="./netlify_html/dev/audio_analysis.html">🎙️ Audio Analysis</a>
-        <a href="./netlify_html/active/andrew_trade.html">🧭 Trade Envoy Data</a>
-        <hr style="border:0; border-top:1px solid #333; margin:0;">
-        <button onclick="window.toggleDebug()" style="color:#e67e22;">📟 Toggle Console</button>
+    <button onclick="document.getElementById('dev_Dropdown').classList.toggle('show')" class="nexus-btn">dev</button>
+    
+    <div id="dev_Dropdown" class="nexus-content" style="width: 280px; max-height: 450px;">
+        <div class="dev-header">SYSTEM CONTROL PANEL</div>
+        
+        <div id="debug-terminal" style="background:#000; color:#00ff00; font-family:monospace; font-size:10px; padding:10px; height:180px; overflow-y:auto; border-bottom:1px solid #333; margin-bottom:5px;">
+            <div>[LOG START]</div>
+        </div>
+
+        <span style="color:#8b949e; font-size:10px; padding-left:10px; text-transform:uppercase;">Development Tools</span>
+        
+        <a href="netlify_html/dev/univ_scale.html">📊 Universal Scaler</a>
+        <a href="netlify_html/dev/audio_analysis.html">🎙️ Audio Analysis</a>
+        
+        <hr style="border:0; border-top:1px solid #30363d; margin:5px 0;">
+        
         <button onclick="window.toggleMainEvent()" style="color:#f1c40f;">👁️ Toggle Display</button>
-        <button onclick="document.getElementById('dev_Dropdown').classList.remove('show')" style="color:#e74c3c;">Close</button>
+        <button onclick="document.getElementById('dev_Dropdown').classList.remove('show')" style="color:#e74c3c;">Close Panel</button>
     </div>
 </div>
 
 <script type="module">
-    // 1. IMMEDIATE GLOBAL BINDING
-    // We define these first so the buttons have targets even if imports take time.
     const term = document.getElementById('debug-terminal');
-    
-    window.toggleDebug = function() {
-        if(!term) return;
-        term.style.display = (term.style.display === 'none' || term.style.display === '') ? 'block' : 'none';
+
+    // 1. Unified Logging (Appears inside the dropdown)
+    window.console.log = function(msg) {
+        if (typeof msg === 'string' && msg.includes('ResizeObserver')) return;
+        const line = document.createElement('div');
+        line.innerHTML = `> ${msg}`;
+        term.appendChild(line);
+        term.scrollTop = term.scrollHeight;
     };
 
     window.toggleMainEvent = function() {
@@ -72,50 +83,31 @@
         if(el) el.style.display = (el.style.display === 'none') ? 'block' : 'none';
     };
 
-    // 2. ERROR INTERCEPTOR
-    const originalLog = console.log;
-    console.log = function(msg) {
-        if (typeof msg === 'string' && msg.includes('ResizeObserver')) return;
-        if(term) {
-            const line = document.createElement('div');
-            line.innerHTML = `> ${msg}`;
-            term.appendChild(line);
-            term.scrollTop = term.scrollHeight;
-        }
-        originalLog.apply(console, arguments);
-    };
-
-    // 3. ASYNC IMPORT ENGINE
-    // This allows us to catch "Permission Denied" or "404" errors specifically.
+    // 2. The JS-Only Loader (No HTML fallbacks)
     window.loadProgram = async function(prog) {
-        console.log("System calling: " + prog);
+        console.log("Invoking module: " + prog);
         try {
             if (prog === 'network') {
+                // Testing direct relative path without leading dots for GitHub compatibility
                 const { initNetwork } = await import('./netlify_html/active/network.js');
                 initNetwork('network-map');
-                console.log("JMail Master Loaded Successfully.");
+                console.log("Master JS Active.");
             } else if (prog === 'andrew') {
                 const { initAndrew } = await import('./netlify_html/active/andrew_trade.js');
                 initAndrew('network-map');
-                console.log("Trade Envoy Loaded Successfully.");
+                console.log("Andrew JS Active.");
             }
         } catch (err) {
-            // This is where we see the "Permission" or "Path" issues
-            console.log("<span style='color:#ff4444;'>CRITICAL LOAD FAILURE: " + err.message + "</span>");
-            console.log("Check if file exists at: ./netlify_html/active/" + (prog === 'network' ? 'network.js' : 'andrew_trade.js'));
+            console.log("<span style='color:#ff4444;'>FAILURE: " + err.message + "</span>");
         }
-        
-        const drop = document.getElementById('dev_Dropdown');
-        if (drop) drop.classList.remove('show');
     };
 
-    // 4. BOOT
+    // 3. Initial Boot
     window.addEventListener('load', () => {
-        console.log("Nexus v4.9.4 Online. Checking .nojekyll bypass...");
+        console.log("Nexus v4.9.6 Booting...");
         window.loadProgram('network'); 
     });
 </script>
-
 
 </body>
 </html>
