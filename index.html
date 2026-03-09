@@ -83,6 +83,17 @@
             console.error("Network Map Error: ", err);
         }
     };
+    
+    window.onerror = function(msg, url, line) {
+    // If the map fails, this alert will tell you WHY on your phone
+    alert("CRITICAL ERROR: " + msg + "\nLine: " + line);
+    return false;
+};
+
+window.onload = function() {
+    console.log("GitHub Pages: Deployment Active.");
+    // ... existing vis-network code ...
+};
 </script>
 </body>
 </html>
