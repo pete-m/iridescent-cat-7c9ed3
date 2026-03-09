@@ -53,6 +53,14 @@
             var edges = new vis.DataSet([{from: 1, to: 2}]);
             new vis.Network(container, {nodes, edges}, {physics: {stabilization: true}});
         };
+        ...
+</script>
+       <script type="module">
+    // The "./" is mandatory for relative paths on GitHub Pages
+    import { initAndrew } from './active/andrew_trade.js';
+    import { initNetwork } from './active/network.js';
+
+    // ... rest of your controller logic ..
     </script>
 </body>
 </html>
