@@ -3,51 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkScope Nexus | March 2026</title>
+    <title>LinkScope Hub | GitHub Pages v3.5</title>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/standalone/umd/vis-network.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/hnldesign/mobileConsole@master/mobileConsole.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/hnldesign/mobileConsole@latest/hnl.mobileconsole.min.js"></script>
 
     <style>
-        /* Force full height and prevent squeezing */
-        html, body { margin: 0; padding: 0; height: 100%; width: 100%; background: #05070a; overflow: hidden; display: flex; flex-direction: column; }
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #05070a; overflow: hidden; display: flex; flex-direction: column; }
         
-        /* Ticker Fix: Ensure horizontal scroll and no wrapping */
-        #ticker-wrap { background: #962d22; color: white; padding: 12px 0; border-bottom: 3px solid #641e16; flex-shrink: 0; width: 100%; overflow: hidden; }
-        .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; animation: marquee 40s linear infinite; font-family: monospace; font-size: 14px; font-weight: bold; }
-        @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+        #ticker-wrap { background: #962d22; height: 45px; display: flex; align-items: center; border-bottom: 3px solid #641e16; overflow: hidden; }
+        .ticker { white-space: nowrap; padding-left: 100%; animation: marquee 40s linear infinite; color: white; font-family: monospace; font-weight: bold; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-200%); } }
 
-        /* Network Map: Must have explicit height/width to render */
-        #network-map { flex-grow: 1; width: 100%; background: #ffffff; position: relative; }
+        /* The Map must have flex-grow to appear */
+        #network-map { flex-grow: 1; width: 100%; background: #ffffff; }
 
-        /* Menu Styling */
-        #nexus-menu { position: fixed; bottom: 20px; left: 20px; z-index: 9999; }
-        .nexus-btn { background: #1c5982; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .nexus-content { display: none; position: absolute; bottom: 55px; left: 0; background: #0d1117; min-width: 220px; border: 1px solid #30363d; border-radius: 8px; }
-        .nexus-content a, .nexus-content button { color: #58a6ff; padding: 12px 18px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; background: none; width: 100%; text-align: left; border: none; cursor: pointer; }
+        #nexus-menu { position: fixed; bottom: 20px; left: 20px; z-index: 10000; }
+        .nexus-btn { background: #1c5982; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; }
+        .nexus-content { display: none; position: absolute; bottom: 55px; left: 0; background: #0d1117; width: 220px; border: 1px solid #30363d; border-radius: 8px; }
+        .nexus-content a, .nexus-content button { color: #58a6ff; padding: 12px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; width: 100%; background: none; text-align: left; border: none; font-size: 13px; }
         .show { display: block; }
     </style>
 </head>
 <body>
 
 <div id="ticker-wrap">
-    <div class="ticker">
-        [MAR 9] LUTNICK VOLUNTARY INTERVIEW AGREED --- AG BONDI SUBPOENAED --- JMAIL RESTORATION ACTIVE --- TRADE ENVOY FILES PENDING ---
-    </div>
+    <div class="ticker">[MAR 9 2026] AG BONDI SUBPOENAED --- TRADE ENVOY FILES PENDING RELEASE --- LUTNICK INTERVIEW CONFIRMED ---</div>
 </div>
 
 <div id="network-map"></div>
 
 <div id="nexus-menu">
     <div id="myDropdown" class="nexus-content">
-        <a href="./netlify_html/univ_scale.htm">📊 Universal Scaler</a>
-        <a href="./netlify_html/audio.html">🎙️ Audio Analysis</a>
-        <a href="./netlify_html/navigator.html">🧭 PG Navigator</a>
-        <button onclick="try{mobileConsole.show()}catch(e){alert('Console Script Blocked')}">🛠️ Open JS Console</button>
+        <a href="./netlify_html/univ_scale.html">📊 Universal Scaler</a>
+        <a href="./netlify_html/audio_analysis.html">🎙️ Audio Analysis</a>
+        <a href="./netlify_html/andrew_trade.html">🧭 Trade Envoy Data</a>
+        <button onclick="mobileConsole.init(); mobileConsole.show();">🛠️ Force Console</button>
     </div>
-    <button onclick="toggleNexus()" class="nexus-btn">NEXUS MAINTENANCE v3.3</button>
+    <button onclick="toggleNexus()" class="nexus-btn">NEXUS DEV v3.5</button>
 </div>
 
+<script>
+    function toggleNexus() { document.getElementById("myDropdown").classList.toggle("show"); }
+
+    window.onload = function() {
+        // Log to capture in the new console
+        console.log("LinkScope v3.5: Checking Systems...");
+        
+        var nodes = new vis.DataSet([
+            {id: 1, label: 'Jeffrey Epstein', color: '#000', font:{color:'#fff'}, shape: 'diamond'},
+            {id: 2, label: 'Howard Lutnick', color: '#3498db'}
+        ]);
+        var edges = new vis.DataSet([{from: 1, to: 2, label: 'Adfin Partner'}]);
+        
+        var container = document.getElementById('network-map');
+        var data = { nodes: nodes, edges: edges };
+        var options = { physics: { stabilization: true } };
+
+        try {
+            var network = new vis.Network(container, data, options);
+            console.log("Network: OK");
+        } catch (e) {
+            console.log("Network Fail: " + e.message);
+        }
+    };
+</script>
+</body>
+</html>
 
 
 
