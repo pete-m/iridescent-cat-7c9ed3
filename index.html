@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkScope Nexus | March 2026 EFTA Hub</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/hnldesign/mobileConsole@master/mobileConsole.min.js"></script>
+    <style>
+        body { margin: 0; background: #05070a; color: #cfd8dc; font-family: 'Courier New', monospace; overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
+        
+        #ticker-wrap { width: 100%; background: #962d22; color: white; padding: 12px 0; z-index: 1000; overflow: hidden; white-space: nowrap; border-bottom: 3px solid #641e16; flex-shrink: 0; }
+        .ticker { display: inline-block; padding-left: 100%; animation: marquee 45s linear infinite; font-size: 13px; font-weight: 800; }
+        @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+
+        #network-map { flex-grow: 1; background: #ffffff; width: 100%; }
+
+        #nexus-menu { position: fixed; bottom: 25px; left: 25px; z-index: 1001; }
+        .nexus-btn { background: #1c5982; color: white; border: none; padding: 15px 25px; border-radius: 4px; cursor: pointer; font-weight: bold; border-bottom: 4px solid #0d3b57; }
+        .nexus-content { display: none; position: absolute; bottom: 60px; left: 0; background: #0d1117; min-width: 260px; border: 1px solid #30363d; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        .nexus-content a, .nexus-content button { color: #58a6ff; padding: 14px 20px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; background: none; width: 100%; text-align: left; border-left: none; border-right: none; cursor: pointer; }
+        .nexus-content a:hover, .nexus-content button:hover { background: #161b22; }
+        .show { display: block; }
+    </style>
+</head>
+<body>
+
+<div id="ticker-wrap">
+    <div class="ticker">
+        [BREAKING MAR 9] COMMONS DEBATE: TRADE ENVOY FILES RELEASED --- [US OVERSIGHT] AG PAM BONDI SUBPOENAED RE: MISSING FBI SUMMARIES --- [DATA RESTORED] DOJ RE-CODES 302 INTERVIEW SUMMARIES --- 
+    </div>
+</div>
+
+<div id="network-map"></div>
+
+<div id="nexus-menu">
+    <div id="myDropdown" class="nexus-content">
+        <a href="netlify_html/univ_scale.htm">📊 Universal Scaler</a>
+        <a href="netlify_html/audio.html">🎙️ Audio Analysis</a>
+        <a href="netlify_html/navigator.html">🧭 PG Navigator</a>
+        <button onclick="mobileConsole.show()">🛠️ Open JS Console</button>
+    </div>
+    <button onclick="toggleNexus()" class="nexus-btn">NEXUS MAINTENANCE v3.0</button>
+</div>
+
+<script>
+    function toggleNexus() { document.getElementById("myDropdown").classList.toggle("show"); }
+
+    // Initialise Network
+    var nodes = new vis.DataSet([
+        {id: 1, label: 'Jeffrey Epstein', color: '#000', font:{color:'#fff', size:22}, shape: 'diamond'},
+        {id: 2, label: 'Howard Lutnick', title: 'Commerce Sec. | Adfin 2012', color: '#3498db'},
+        {id: 6, label: 'Pam Bondi', title: 'AG Subpoenaed Mar 4 re: 2019 FBI summaries', color: '#f39c12'}
+    ]);
+
+    var edges = new vis.DataSet([
+        {from: 1, to: 2, label: 'Investment', color: '#e74c3c'},
+        {from: 6, to: 2, label: 'Subpoena Connection', dashes: true, color: '#f39c12'}
+    ]);
+
+    var container = document.getElementById('network-map');
+    var network = new vis.Network(container, {nodes: nodes, edges: edges}, {
+        physics: { stabilization: true },
+        interaction: { zoomView: true }
+    });
+
+    // Console Logging for Debugging Div Issues
+    console.log("LinkScope Nexus v3.0 Initialised");
+    console.log("Current Container Height: " + container.offsetHeight + "px");
+</script>
+</body>
+</html>
