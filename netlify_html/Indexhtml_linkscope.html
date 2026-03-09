@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LinkScope | Systemic Influence Mapping: EFTA 2026</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #1a1a1a; color: #eee; }
+        #interface-header { padding: 20px; background: #2c3e50; border-bottom: 3px solid #e74c3c; }
+        #linkscope-canvas { width: 100%; height: 80vh; background: #fff; }
+        .controls { padding: 10px; background: #333; display: flex; gap: 20px; font-size: 0.9em; }
+        .legend-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 5px; }
+    </style>
+</head>
+<body>
+
+<div id="interface-header">
+    <h1>LinkScope: The EFTA 2026 Accountability Web</h1>
+    <p>Mapping the 3.5M+ Page DOJ Release & JMail Archive</p>
+</div>
+
+<div class="controls">
+    <div><span class="legend-dot" style="background:#e74c3c"></span> Business/Adfin Ties</div>
+    <div><span class="legend-dot" style="background:#3498db"></span> Political Strategy</div>
+    <div><span class="legend-dot" style="background:#f1c40f"></span> 2026 "Mistakenly Withheld" Files</div>
+</div>
+
+<div id="linkscope-canvas"></div>
+
+<script>
+    var nodes = new vis.DataSet([
+        {id: 1, label: 'Jeffrey Epstein', color: '#000', font:{color:'#fff', size:20}, shape: 'diamond'},
+        {id: 2, label: 'Howard Lutnick (Commerce Sec)', color: '#3498db', font:{size:16}},
+        {id: 3, label: 'Adfin (LLC)', color: '#e74c3c', shape: 'triangle'},
+        {id: 4, label: 'Pam Bondi (AG)', color: '#9b59b6'},
+        {id: 5, label: 'Rep. Robert Garcia (Oversight)', color: '#27ae60'},
+        {id: 6, label: '2026 "Mistakenly Withheld" Files', color: '#f1c40f', shape: 'star'},
+        {id: 7, label: 'Little St. James (Island)', color: '#e67e22'}
+    ]);
+
+    var edges = new vis.DataSet([
+        // The Lutnick/Adfin Cluster (2026 Revelation)
+        {from: 2, to: 3, label: 'Joint Investment (2012)', color: '#e74c3c', width: 4},
+        {from: 1, to: 3, label: 'Joint Investment (2012)', color: '#e74c3c', width: 4},
+        {from: 2, to: 1, label: 'Island Visit Plans (2012)', color: '#3498db', width: 3, dashes: true},
+        
+        // The Oversight/DOJ Cluster
+        {from: 5, to: 4, label: 'Subpoena (March 2026)', color: '#27ae60', arrows: 'to'},
+        {from: 4, to: 6, label: 'Released under Pressure', color: '#f1c40f', arrows: 'to'},
+        {from: 6, to: 1, label: 'Uncorroborated Allegations', color: '#f1c40f', width: 2},
+        
+        // Physical Links
+        {from: 2, to: 7, label: 'Proposed Sunday Lunch', color: '#3498db', dashes: true}
+    ]);
+
+    var container = document.getElementById('linkscope-canvas');
+    var data = { nodes: nodes, edges: edges };
+    var options = {
+        physics: { stabilization: true, barnesHut: { gravitationalConstant: -10000 } },
+        edges: { font: { size: 10, align: 'middle' }, smooth: { type: 'continuous' } }
+    };
+    var network = new vis.Network(container, data, options);
+</script>
+
+</body>
+</html>

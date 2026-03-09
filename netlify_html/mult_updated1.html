@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prime Meridian Drone - Unified Mix</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; justify-content: center; align-items: center; 
+            height: 100vh; margin: 0; background-color: #0a0a12; color: #e0e0e0; 
+        }
+        .app-container { 
+            background-color: #121220; border-radius: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7); 
+            padding: 40px; text-align: center; width: 480px; border: 1px solid #1f1f3a;
+        }
+        .frequency-display { font-size: 3.5em; font-weight: 700; color: #4db8ff; margin-bottom: 5px; line-height: 1; }
+        .unit { font-size: 0.4em; color: #666; vertical-align: super; }
+        .description { font-size: 1em; color: #999; margin-bottom: 25px; font-style: italic; }
+        
+        #status-text { font-weight: bold; letter-spacing: 3px; margin-bottom: 30px; transition: color 0.3s; font-size: 0.8em; }
+        .active { color: #00ffcc; text-shadow: 0 0 15px #00ffcc; }
+        .inactive { color: #444; }
+
+        .mixer-group { background: #1a1a2e; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #252545; }
+        .slider-group { margin-bottom: 18px; text-align: left; }
+        .slider-label { display: flex; justify-content: space-between; font-size: 0.85em; margin-bottom: 6px; color: #aaa; }
+        
+        input[type=range] { width: 100%; cursor: pointer; accent-color: #4db8ff; }
+
+        button {
+            background-color: #1a1a2e; border: 1px solid #4db8ff; color: #4db8ff;
+            padding: 14px 40px; border-radius: 40px; font-size: 1em; font-weight: bold;
+            cursor: pointer; transition: all 0.3s; margin-top: 5px; text-transform: uppercase; letter-spacing: 2px;
+        }
+        button:hover { background-color: #4db8ff; color: #0a0a12; box-shadow: 0 0 20px #4db8ff; }
+        
+        .detune-section { margin-top: 10px; padding-top: 15px; border-top: 1px solid #252545; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="frequency-display">528<span class="unit">Hz</span></div>
+    <div class="description">Prime Meridian Drone (Full Harmonic Stack)</div>
+    <div id="status-text" class="inactive">SYSTEM OFFLINE</div>
+
+    <div class="mixer-group">
+        <div class="slider-group">
+            <div class="slider-label"><span>Sub-Octave 2 (132Hz)</span><span id="v0">0%</span></div>
+            <input type="range" id="s0" min="0" max="100" value="0">
+        </div>
+        <div class="slider-group">
+            <div class="slider-label"><span>Sub-Octave 1 (264Hz)</span><span id="v1">20%</span></div>
+            <input type="range" id="s1" min="0" max="100" value="20">
+        </div>
+
+        <div class="slider-group">
+            <div class="slider-label"><span>Fundamental (528Hz)</span><span id="v2">60%</span></div>
+            <input type="range" id="s2" min="0" max="100" value="60">
+        </div>
+
+        <div class="slider-group">
+            <div class="slider-label"><span>2nd Harmonic (1056Hz)</span><span id="v3">30%</span></div>
+            <input type="range" id="s3" min="0" max="100" value="30">
+        </div>
+        <div class="slider-group">
+            <div class="slider-label"><span>3rd Harmonic (1584Hz)</span><span id="v4">15%</span></div>
+            <input type="range" id="s4" min="0" max="100" value="15">
+        </div>
+
+        <div class="detune-section">
+            <div class="slider-label"><span>Harmonic Spread (Detune)</span><span id="detune-val">0 cents</span></div>
+            <input type="range" id="detune-slider" min="-20" max="20" value="0" step="0.1">
+        </div>
+    </div>
+
+    <button id="power-btn">Activate Meridian</button>
+</div>
+
+<script>
+    let audioCtx = null;
+    let oscillators = [];
+    let gainNodes = [];
+    let isRunning = false;
+
+    const baseFreq = 528;
+    const ratios = [0.25, 0.5, 1, 2, 3];
+    const powerBtn = document.getElementById('power-btn');
+    const statusText = document.getElementById('status-text');
+
+    function initAudio() {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        ratios.forEach((ratio, i) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.frequency.value = baseFreq * ratio;
+            gain.gain.value = document.getElementById(`s${i}`).value / 100;
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            oscillators.push(osc);
+            gainNodes.push(gain);
+            osc.start();
+        });
+        audioCtx.suspend();
+    }
+
+    powerBtn.addEventListener('click', () => {
+        if (!audioCtx) initAudio();
+        if (!isRunning) {
+            audioCtx.resume();
+            statusText.innerText = "MERIDIAN ACTIVE";
+            statusText.className = "active";
+            powerBtn.innerText = "Deactivate";
+        } else {
+            audioCtx.suspend();
+            statusText.innerText = "SYSTEM OFFLINE";
+            statusText.className = "inactive";
+            powerBtn.innerText = "Activate Meridian";
+        }
+        isRunning = !isRunning;
+    });
+
+    // Handle Gain Sliders
+    for(let i=0; i<5; i++) {
+        document.getElementById(`s${i}`).addEventListener('input', (e) => {
+            const val = e.target.value;
+            document.getElementById(`v${i}`).innerText = val + "%";
+            if (gainNodes[i]) gainNodes[i].gain.setTargetAtTime(val / 100, audioCtx.currentTime, 0.05);
+        });
+    }
+
+    // Handle Detune Spread
+    document.getElementById('detune-slider').addEventListener('input', (e) => {
+        const val = e.target.value;
+        document.getElementById('detune-val').innerText = val + " cents";
+        // Apply detune to upper harmonics (2nd and 3rd) for richness
+        if (oscillators[3]) oscillators[3].detune.setTargetAtTime(val, audioCtx.currentTime, 0.05);
+        if (oscillators[4]) oscillators[4].detune.setTargetAtTime(val * 1.5, audioCtx.currentTime, 0.05);
+    });
+</script>
+
+</body>
+</html>
