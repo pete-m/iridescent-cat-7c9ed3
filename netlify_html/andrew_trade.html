@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Envoy Analysis | LinkScope 2026</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body { margin: 0; background: #05070a; color: #cfd8dc; font-family: 'Courier New', monospace; }
+        #network-map { width: 100vw; height: 100vh; background: #ffffff; }
+        .data-header { position: fixed; top: 15px; left: 15px; z-index: 100; background: rgba(5, 7, 10, 0.9); padding: 15px; border-left: 4px solid #2ecc71; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-size: 13px; }
+        .data-header strong { color: #2ecc71; }
+    </style>
+</head>
+<body>
+
+<div class="data-header">
+    <strong>DATASET: TRADE ENVOY (ANDREW)</strong><br>
+    Status: Arrested Feb 19, 2026 (Misconduct in Office)<br>
+    Source: HOC Release (Humble Address) / DOJ 302 Summaries
+</div>
+
+<div id="network-map"></div>
+
+<script>
+    window.onload = function() {
+        const container = document.getElementById('network-map');
+        
+        const nodes = new vis.DataSet([
+            {id: 1, label: 'Andrew Windsor-Mountbatten', color: '#2ecc71', font:{size: 20}, shape: 'dot', title: 'Special Rep for Trade (2001-2011)'},
+            {id: 2, label: 'Jeffrey Epstein', color: '#000', font:{color:'#fff'}, shape: 'diamond'},
+            {id: 3, label: 'Helmand Mineral Report', title: 'Dec 2010: Uranium, Gold, Thorium deposits in Helmand', shape: 'database', color: '#e67e22'},
+            {id: 4, label: 'Vietnam/Singapore/China Files', title: 'Confidential trade visit summaries (2010)', shape: 'database', color: '#f1c40f'},
+            {id: 5, label: 'Thames Valley Police', title: 'Active Misconduct in Public Office Investigation', shape: 'box', color: '#3498db'},
+            {id: 6, label: 'Adfin Solutions', title: 'Signature link between Epstein & Lutnick (2012)', color: '#e74c3c'}
+        ]);
+
+        const edges = new vis.DataSet([
+            {from: 1, to: 2, label: 'Email Forwarding', width: 3, dashes: true, title: 'Forwarded confidential trade reports 5 mins after receipt'},
+            {from: 1, to: 3, label: 'Access', title: 'Helmand visit Dec 2010'},
+            {from: 5, to: 1, label: 'Arrested 19/02/26', arrows: 'to', color: '#c0392b', width: 4},
+            {from: 3, to: 2, label: 'Shared 24/12/10', arrows: 'to', dashes: true},
+            {from: 4, to: 2, label: 'Shared 2010', arrows: 'to', dashes: true}
+        ]);
+
+        const options = {
+            physics: { stabilization: true },
+            interaction: { hover: true, tooltipDelay: 200 }
+        };
+
+        new vis.Network(container, {nodes, edges}, options);
+    };
+</script>
+</body>
+</html>
