@@ -3,61 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkScope | The Accountability Web (EFTA 2026)</title>
+    <title>LinkScope Nexus | EFTA 2026 OSINT Hub</title>
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <style>
-        body { margin: 0; background: #0b0e14; color: #cfd8dc; font-family: 'Segoe UI', sans-serif; }
+        /* Base Styling */
+        body { margin: 0; background: #0b0e14; color: #cfd8dc; font-family: 'Courier New', monospace; overflow: hidden; }
+        
+        /* Live JMail Ticker */
+        #ticker-wrap { position: fixed; top: 0; width: 100%; background: #c0392b; color: white; padding: 10px 0; z-index: 1000; overflow: hidden; white-space: nowrap; border-bottom: 2px solid #962d22; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .ticker { display: inline-block; padding-left: 100%; animation: marquee 35s linear infinite; font-size: 13px; letter-spacing: 1px; }
+        @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+
+        /* Nexus Navigation Menu */
+        #nexus-menu { position: fixed; bottom: 25px; left: 25px; z-index: 1001; }
+        .nexus-btn { background: #2980b9; color: white; border: none; padding: 14px 22px; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: 'Courier New', monospace; border-bottom: 3px solid #1c5982; transition: 0.2s; }
+        .nexus-btn:hover { background: #3498db; transform: translateY(-2px); }
+        .nexus-content { display: none; position: absolute; bottom: 55px; left: 0; background: #161b22; min-width: 240px; border: 1px solid #30363d; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
+        .nexus-content a { color: #58a6ff; padding: 12px 18px; text-decoration: none; display: block; border-bottom: 1px solid #30363d; font-size: 14px; }
+        .nexus-content a:hover { background: #1f242c; color: #ffffff; }
+        .show { display: block; }
+
+        /* Map Container */
         #network-map { width: 100vw; height: 100vh; background: #ffffff; }
-        .header { position: absolute; top: 0; width: 100%; background: rgba(0,0,0,0.85); padding: 10px 20px; z-index: 10; border-bottom: 2px solid #e74c3c; }
-        .footer { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.85); padding: 5px 20px; font-size: 11px; color: #90a4ae; }
+        
+        /* Info Overlay */
+        .info-panel { position: absolute; top: 60px; right: 20px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 4px; border-left: 4px solid #f1c40f; max-width: 250px; font-size: 12px; pointer-events: none; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <strong>LinkScope: EFTA 2026 Accountability Web</strong><br>
-    <small>Current Status: Howard Lutnick agrees to House Oversight Interview (Mar 3, 2026)</small>
+<div id="ticker-wrap">
+    <div class="ticker">
+        [LIVE UPDATE - MAR 9, 2026] COMMERCE SEC HOWARD LUTNICK AGREES TO TRANSCRIBED HOUSE INTERVIEW --- [EFTA ALERT] DOJ RESTORES MISTAKENLY DELETED "ISLAND LUNCH" PHOTO --- [JMAIL ARCHIVE] ADFIN SOLUTIONS INVESTMENT CONTRACTS LINK LUTNICK AND EPSTEIN IN 2012 --- [OVERSIGHT] PAM BONDI SUBPOENAED OVER PROBE INTERFERENCE ---
+    </div>
+</div>
+
+<div id="nexus-menu">
+    <div id="myDropdown" class="nexus-content">
+        <a href="univ_scale.htm">📊 Universal Scaler</a>
+        <a href="audio.html">🎙️ Audio Analysis</a>
+        <a href="navigator.html">🧭 PG Navigator</a>
+        <a href="visualiser.html">👁️ Sam Visualiser</a>
+        <a href="https://github.com/pete-m/iridescent-linkscope" target="_blank" style="color:#8b949e; font-size: 11px;">View Source on GitHub</a>
+    </div>
+    <button onclick="toggleNexus()" class="nexus-btn">SYSTEM MAINTENANCE / NEXUS</button>
+</div>
+
+<div class="info-panel">
+    <strong>OPERATIONAL NOTE:</strong><br>
+    Select nodes to display specific 2026 JMail Evidence citations. Map reveals connections between DOJ releases and current testimony.
 </div>
 
 <div id="network-map"></div>
 
-<div class="footer">
-    Data Source: DOJ Epstein Files Transparency Act (JMail Archive) | Prototype: Pete Gambon / Sam Etegal
-</div>
-
 <script>
+    function toggleNexus() { document.getElementById("myDropdown").classList.toggle("show"); }
+
+    // Accountability Web Data
     var nodes = new vis.DataSet([
         {id: 1, label: 'Jeffrey Epstein', color: '#000', font:{color:'#fff', size:20}, shape: 'diamond'},
-        {id: 2, label: 'Howard Lutnick', title: 'Commerce Sec. (Under fire for 2012 island lunch)', color: '#3498db'},
-        {id: 3, label: 'Adfin Solutions', title: 'Joint Investment confirmed via 2026 DOJ Un-redaction', shape: 'triangle', color: '#e74c3c'},
-        {id: 4, label: 'House Oversight', title: 'James Comer leads transcribed interview (Mar 2026)', color: '#2ecc71'},
+        {id: 2, label: 'Howard Lutnick', title: 'Commerce Sec. | AGREED TO TESTIFY MAR 2026', color: '#3498db'},
+        {id: 3, label: 'Adfin Solutions', title: 'Joint 2012 Investment (Confirmed by EFTA DOJ Release)', shape: 'triangle', color: '#e74c3c'},
+        {id: 4, label: 'House Oversight', title: 'James Comer leading Mar 2026 transcribed interview', color: '#2ecc71'},
         {id: 5, label: 'JMail Archive', shape: 'database', color: '#f1c40f'},
-        {id: 6, label: 'Pam Bondi', title: 'Subpoenaed by House (Mar 2026)', color: '#9b59b6'}
+        {id: 6, label: 'Pam Bondi', title: 'Subpoenaed Mar 2026 regarding probe interference', color: '#9b59b6'}
     ]);
 
     var edges = new vis.DataSet([
-        {from: 1, to: 3, label: 'Capital Injection', title: 'JMail Ref: Shared investment in Adfin (2012)', width: 4, color: '#e74c3c'},
-        {from: 2, to: 3, label: 'Principal', title: 'Contract signed by Lutnick (DOJ Release Mar 2026)', width: 4, color: '#e74c3c'},
-        {from: 4, to: 2, label: 'Interview Agreed', title: 'Voluntary appearance (Mar 3, 2026)', arrows: 'to', color: '#2ecc71', width: 2},
-        {from: 5, to: 2, label: 'Evidence Found', title: 'Email: "How are the Adfin prospects?" (2018)', dashes: true, color: '#f1c40f'},
-        {from: 2, to: 1, label: 'Contradiction', title: 'Lutnick claimed ties cut 2005; Files show 2012 island lunch', color: '#e67e22', width: 3}
+        {from: 1, to: 3, label: 'Investor', title: 'Shared Adfin funding (2012)', width: 4, color: '#e74c3c'},
+        {from: 2, to: 3, label: 'Principal', title: 'Lutnick signed Adfin principal docs (DOJ 2026)', width: 4, color: '#e74c3c'},
+        {from: 4, to: 2, label: 'Interrogation', title: 'Voluntary Transcribed Interview Agreed', arrows: 'to', color: '#2ecc71'},
+        {from: 5, to: 2, label: 'JMail Log', title: '2018 Email: "How are Adfin prospects?"', dashes: true, color: '#f1c40f'},
+        {from: 2, to: 1, label: '2012 Meeting', title: 'Contradicts 2005 "severed ties" claim', color: '#e67e22', width: 2}
     ]);
 
     var container = document.getElementById('network-map');
-    var data = { nodes: nodes, edges: edges };
-    var options = {
-        physics: { stabilization: true, barnesHut: { gravitationalConstant: -15000 } },
-        interaction: { hover: true, zoomView: true, dragNodes: true },
-        nodes: { borderWidth: 2, shadow: true },
-        edges: { font: { size: 10, align: 'top' }, smooth: { type: 'dynamic' } }
-    };
-    var network = new vis.Network(container, data, options);
+    var network = new vis.Network(container, {nodes: nodes, edges: edges}, {
+        physics: { stabilization: true, barnesHut: { gravitationalConstant: -20000 } },
+        interaction: { zoomView: true, dragNodes: true },
+        edges: { font: { size: 11, background: '#ffffff' } }
+    });
 
-    // Alert evidence on tap for mobile
+    // Interaction Handler
     network.on("click", function (params) {
         if (params.nodes.length > 0) {
             var node = nodes.get(params.nodes[0]);
-            if (node.title) alert(node.label + " | " + node.title);
+            if (node.title) alert("CITIATION: " + node.title);
         }
     });
 </script>
