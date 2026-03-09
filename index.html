@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkScope | The Accountability Web (EFTA 2026)</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body { margin: 0; background: #0b0e14; color: #cfd8dc; font-family: 'Segoe UI', sans-serif; }
+        #network-map { width: 100vw; height: 100vh; background: #ffffff; }
+        .header { position: absolute; top: 0; width: 100%; background: rgba(0,0,0,0.85); padding: 10px 20px; z-index: 10; border-bottom: 2px solid #e74c3c; }
+        .footer { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.85); padding: 5px 20px; font-size: 11px; color: #90a4ae; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <strong>LinkScope: EFTA 2026 Accountability Web</strong><br>
+    <small>Current Status: Howard Lutnick agrees to House Oversight Interview (Mar 3, 2026)</small>
+</div>
+
+<div id="network-map"></div>
+
+<div class="footer">
+    Data Source: DOJ Epstein Files Transparency Act (JMail Archive) | Prototype: Pete Gambon / Sam Etegal
+</div>
+
+<script>
+    var nodes = new vis.DataSet([
+        {id: 1, label: 'Jeffrey Epstein', color: '#000', font:{color:'#fff', size:20}, shape: 'diamond'},
+        {id: 2, label: 'Howard Lutnick', title: 'Commerce Sec. (Under fire for 2012 island lunch)', color: '#3498db'},
+        {id: 3, label: 'Adfin Solutions', title: 'Joint Investment confirmed via 2026 DOJ Un-redaction', shape: 'triangle', color: '#e74c3c'},
+        {id: 4, label: 'House Oversight', title: 'James Comer leads transcribed interview (Mar 2026)', color: '#2ecc71'},
+        {id: 5, label: 'JMail Archive', shape: 'database', color: '#f1c40f'},
+        {id: 6, label: 'Pam Bondi', title: 'Subpoenaed by House (Mar 2026)', color: '#9b59b6'}
+    ]);
+
+    var edges = new vis.DataSet([
+        {from: 1, to: 3, label: 'Capital Injection', title: 'JMail Ref: Shared investment in Adfin (2012)', width: 4, color: '#e74c3c'},
+        {from: 2, to: 3, label: 'Principal', title: 'Contract signed by Lutnick (DOJ Release Mar 2026)', width: 4, color: '#e74c3c'},
+        {from: 4, to: 2, label: 'Interview Agreed', title: 'Voluntary appearance (Mar 3, 2026)', arrows: 'to', color: '#2ecc71', width: 2},
+        {from: 5, to: 2, label: 'Evidence Found', title: 'Email: "How are the Adfin prospects?" (2018)', dashes: true, color: '#f1c40f'},
+        {from: 2, to: 1, label: 'Contradiction', title: 'Lutnick claimed ties cut 2005; Files show 2012 island lunch', color: '#e67e22', width: 3}
+    ]);
+
+    var container = document.getElementById('network-map');
+    var data = { nodes: nodes, edges: edges };
+    var options = {
+        physics: { stabilization: true, barnesHut: { gravitationalConstant: -15000 } },
+        interaction: { hover: true, zoomView: true, dragNodes: true },
+        nodes: { borderWidth: 2, shadow: true },
+        edges: { font: { size: 10, align: 'top' }, smooth: { type: 'dynamic' } }
+    };
+    var network = new vis.Network(container, data, options);
+
+    // Alert evidence on tap for mobile
+    network.on("click", function (params) {
+        if (params.nodes.length > 0) {
+            var node = nodes.get(params.nodes[0]);
+            if (node.title) alert(node.label + " | " + node.title);
+        }
+    });
+</script>
+</body>
+</html>
