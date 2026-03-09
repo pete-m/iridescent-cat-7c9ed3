@@ -3,55 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkScope Nexus | EFTA 2026 OSINT Hub</title>
+    <title>LinkScope Nexus | Maximal EFTA 2026 Display</title>
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <style>
-        /* Base Styling */
-        body { margin: 0; background: #0b0e14; color: #cfd8dc; font-family: 'Courier New', monospace; overflow: hidden; }
+        body { margin: 0; background: #05070a; color: #cfd8dc; font-family: 'Courier New', monospace; overflow: hidden; }
         
-        /* Live JMail Ticker */
-        #ticker-wrap { position: fixed; top: 0; width: 100%; background: #c0392b; color: white; padding: 10px 0; z-index: 1000; overflow: hidden; white-space: nowrap; border-bottom: 2px solid #962d22; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .ticker { display: inline-block; padding-left: 100%; animation: marquee 35s linear infinite; font-size: 13px; letter-spacing: 1px; }
+        /* JMail Live Ticker - March 2026 */
+        #ticker-wrap { position: fixed; top: 0; width: 100%; background: #962d22; color: white; padding: 12px 0; z-index: 1000; overflow: hidden; white-space: nowrap; border-bottom: 3px solid #641e16; }
+        .ticker { display: inline-block; padding-left: 100%; animation: marquee 45s linear infinite; font-size: 13px; font-weight: 800; }
         @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
-        /* Nexus Navigation Menu */
+        /* Navigation & Nexus */
         #nexus-menu { position: fixed; bottom: 25px; left: 25px; z-index: 1001; }
-        .nexus-btn { background: #2980b9; color: white; border: none; padding: 14px 22px; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: 'Courier New', monospace; border-bottom: 3px solid #1c5982; transition: 0.2s; }
-        .nexus-btn:hover { background: #3498db; transform: translateY(-2px); }
-        .nexus-content { display: none; position: absolute; bottom: 55px; left: 0; background: #161b22; min-width: 240px; border: 1px solid #30363d; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
-        .nexus-content a { color: #58a6ff; padding: 12px 18px; text-decoration: none; display: block; border-bottom: 1px solid #30363d; font-size: 14px; }
-        .nexus-content a:hover { background: #1f242c; color: #ffffff; }
+        .nexus-btn { background: #1c5982; color: white; border: none; padding: 15px 25px; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: 'Courier New', monospace; border-bottom: 4px solid #0d3b57; }
+        .nexus-content { display: none; position: absolute; bottom: 60px; left: 0; background: #0d1117; min-width: 260px; border: 1px solid #30363d; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        .nexus-content a { color: #58a6ff; padding: 14px 20px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; }
+        .nexus-content a:hover { background: #161b22; color: #fff; }
         .show { display: block; }
 
-        /* Map Container */
         #network-map { width: 100vw; height: 100vh; background: #ffffff; }
         
-        /* Info Overlay */
-        .info-panel { position: absolute; top: 60px; right: 20px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 4px; border-left: 4px solid #f1c40f; max-width: 250px; font-size: 12px; pointer-events: none; }
+        /* Evidence Tooltip Style */
+        .vis-tooltip { background-color: #161b22 !important; color: #fff !important; border: 1px solid #3498db !important; padding: 10px !important; border-radius: 4px !important; font-family: monospace !important; }
     </style>
 </head>
 <body>
 
 <div id="ticker-wrap">
     <div class="ticker">
-        [LIVE UPDATE - MAR 9, 2026] COMMERCE SEC HOWARD LUTNICK AGREES TO TRANSCRIBED HOUSE INTERVIEW --- [EFTA ALERT] DOJ RESTORES MISTAKENLY DELETED "ISLAND LUNCH" PHOTO --- [JMAIL ARCHIVE] ADFIN SOLUTIONS INVESTMENT CONTRACTS LINK LUTNICK AND EPSTEIN IN 2012 --- [OVERSIGHT] PAM BONDI SUBPOENAED OVER PROBE INTERFERENCE ---
+        [BREAKING MAR 4] HOUSE OVERSIGHT SUBPOENAS AG PAM BONDI OVER "HIDDEN" EPSTEIN FILES --- [TESTIMONY] LUTNICK AGREES TO VOLUNTARY INTERVIEW ON MAR 3 RE: ADFIN 2012 --- [UK] ANDREW ARRESTED UNDER MISCONDUCT INVESTIGATION; TRADE FILES PENDING --- [DEA] REVELATION: EPSTEIN WAS SUBJECT OF 5-YEAR DEA PROBE RE: SUSPICIOUS TRANSFERS ---
     </div>
 </div>
 
 <div id="nexus-menu">
     <div id="myDropdown" class="nexus-content">
-        <a href="univ_scale.htm">📊 Universal Scaler</a>
-        <a href="audio.html">🎙️ Audio Analysis</a>
-        <a href="navigator.html">🧭 PG Navigator</a>
-        <a href="visualiser.html">👁️ Sam Visualiser</a>
-        <a href="https://github.com/pete-m/iridescent-linkscope" target="_blank" style="color:#8b949e; font-size: 11px;">View Source on GitHub</a>
+        <a href="univ_scale.htm">📊 Universal Scaler (Experimental)</a>
+        <a href="audio.html">🎙️ Audio Analysis: Amalfi Emails</a>
+        <a href="navigator.html">🧭 PG Navigator: The British Probe</a>
+        <a href="visualiser.html">👁️ Sam Visualiser: Data Set 12</a>
     </div>
-    <button onclick="toggleNexus()" class="nexus-btn">SYSTEM MAINTENANCE / NEXUS</button>
-</div>
-
-<div class="info-panel">
-    <strong>OPERATIONAL NOTE:</strong><br>
-    Select nodes to display specific 2026 JMail Evidence citations. Map reveals connections between DOJ releases and current testimony.
+    <button onclick="toggleNexus()" class="nexus-btn">NEXUS MAINTENANCE v2.7</button>
 </div>
 
 <div id="network-map"></div>
@@ -59,36 +50,42 @@
 <script>
     function toggleNexus() { document.getElementById("myDropdown").classList.toggle("show"); }
 
-    // Accountability Web Data
     var nodes = new vis.DataSet([
-        {id: 1, label: 'Jeffrey Epstein', color: '#000', font:{color:'#fff', size:20}, shape: 'diamond'},
-        {id: 2, label: 'Howard Lutnick', title: 'Commerce Sec. | AGREED TO TESTIFY MAR 2026', color: '#3498db'},
-        {id: 3, label: 'Adfin Solutions', title: 'Joint 2012 Investment (Confirmed by EFTA DOJ Release)', shape: 'triangle', color: '#e74c3c'},
-        {id: 4, label: 'House Oversight', title: 'James Comer leading Mar 2026 transcribed interview', color: '#2ecc71'},
-        {id: 5, label: 'JMail Archive', shape: 'database', color: '#f1c40f'},
-        {id: 6, label: 'Pam Bondi', title: 'Subpoenaed Mar 2026 regarding probe interference', color: '#9b59b6'}
+        {id: 1, label: 'Jeffrey Epstein', color: '#000', font:{color:'#fff', size:22}, shape: 'diamond'},
+        {id: 2, label: 'Howard Lutnick', title: 'Commerce Sec. | Adfin Partner 2012 | Agrees to Interview Mar 2026', color: '#3498db'},
+        {id: 3, label: 'Adfin Solutions', title: 'Investment Bridge: Lutnick & Epstein signatures found on 2012 contracts', shape: 'triangle', color: '#e74c3c'},
+        {id: 4, label: 'Prince Andrew', title: 'Former Trade Envoy | Arrested Feb 2026 | Trade Envoy Files Release Pending', color: '#2ecc71'},
+        {id: 5, label: 'Peter Mandelson', title: 'Emails deciphered by TBIJ re: "Amalfi Villa" for "guests"', color: '#9b59b6'},
+        {id: 6, label: 'Pam Bondi', title: 'US Attorney General | Subpoenaed Mar 4 over missing Trump/Epstein files', color: '#f39c12'},
+        {id: 7, label: 'James Comer', title: 'House Oversight Chair | Coordinating Lutnick & Bondi Testimony', color: '#e67e22'},
+        {id: 8, label: 'DEA Probe', title: 'Secret 5-year investigation into Epstein money transfers revealed Mar 2026', shape: 'star', color: '#c0392b'},
+        {id: 9, label: 'JMail Archive', shape: 'database', color: '#f1c40f'},
+        {id: 10, label: 'Villa Treville', title: 'Amalfi clifftop location recommended by Mandelson in JMail', color: '#1abc9c'}
     ]);
 
     var edges = new vis.DataSet([
-        {from: 1, to: 3, label: 'Investor', title: 'Shared Adfin funding (2012)', width: 4, color: '#e74c3c'},
-        {from: 2, to: 3, label: 'Principal', title: 'Lutnick signed Adfin principal docs (DOJ 2026)', width: 4, color: '#e74c3c'},
-        {from: 4, to: 2, label: 'Interrogation', title: 'Voluntary Transcribed Interview Agreed', arrows: 'to', color: '#2ecc71'},
-        {from: 5, to: 2, label: 'JMail Log', title: '2018 Email: "How are Adfin prospects?"', dashes: true, color: '#f1c40f'},
-        {from: 2, to: 1, label: '2012 Meeting', title: 'Contradicts 2005 "severed ties" claim', color: '#e67e22', width: 2}
+        {from: 1, to: 3, label: 'Capital', title: 'JMail Ref: Shared funding in Adfin (2012)', width: 5, color: '#e74c3c'},
+        {from: 2, to: 3, label: 'Principal', title: 'Contract signed by Lutnick (DOJ Release 2026)', width: 5, color: '#e74c3c'},
+        {from: 5, to: 1, label: 'Villa Referral', title: 'Mandelson email recommending privacy for "guests"', color: '#9b59b6'},
+        {from: 4, to: 1, label: 'Sensitive Intel', title: 'Alleged leak of Gold/Uranium trade reports', width: 3, color: '#2ecc71'},
+        {from: 7, to: 2, label: 'Interview', title: 'Voluntary transcribed appearance agreed Mar 3', arrows: 'to', color: '#3498db'},
+        {from: 7, to: 6, label: 'Subpoena', title: 'Committee vote Mar 4; Mace Motion passed', arrows: 'to', color: '#f39c12', width: 4},
+        {from: 8, to: 1, label: 'Investigation', title: 'DEA Fusion Center probe into 14 targets', color: '#c0392b', dashes: true},
+        {from: 9, to: 5, label: 'Deciphered', title: 'TBIJ unmasked Mandelson as author of Amalfi email', dashes: true, color: '#f1c40f'},
+        {from: 10, to: 5, label: 'Location', title: 'Zeffirelli home converted to suites', color: '#1abc9c'}
     ]);
 
     var container = document.getElementById('network-map');
     var network = new vis.Network(container, {nodes: nodes, edges: edges}, {
-        physics: { stabilization: true, barnesHut: { gravitationalConstant: -20000 } },
-        interaction: { zoomView: true, dragNodes: true },
-        edges: { font: { size: 11, background: '#ffffff' } }
+        physics: { stabilization: true, barnesHut: { gravitationalConstant: -30000, centralGravity: 0.3 } },
+        interaction: { hover: true, zoomView: true, dragNodes: true },
+        edges: { font: { size: 10, align: 'top', background: '#ffffff' }, smooth: { type: 'continuous' } }
     });
 
-    // Interaction Handler
     network.on("click", function (params) {
         if (params.nodes.length > 0) {
             var node = nodes.get(params.nodes[0]);
-            if (node.title) alert("CITIATION: " + node.title);
+            alert("OSINT CITATION: " + (node.title || "No metadata yet."));
         }
     });
 </script>
