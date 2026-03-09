@@ -3,89 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkScope Nexus | JMail Stable v4.8</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/standalone/umd/vis-network.min.js" crossorigin="anonymous"></script>
+    <title>LinkScope Nexus | UnStable v4.9.4</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/standalone/umd/vis-network.min.js" crossorigin="anonymous" defer></script>
     <style>
         body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #05070a; overflow: hidden; display: flex; flex-direction: column; }
         #ticker-wrap { background: #962d22; height: 45px; border-bottom: 3px solid #641e16; overflow: hidden; display: flex; align-items: center; flex-shrink: 0; }
-        .ticker { white-space: nowrap; padding-left: 100%; animation: marquee 35s linear infinite; color: white; font-family: monospace; font-weight: bold; }
+        /* Optimized animation performance using will-change */
+        .ticker { 
+            white-space: nowrap; 
+            padding-left: 100%; 
+            animation: marquee 35s linear infinite; 
+            color: white; 
+            font-family: monospace; 
+            font-weight: bold;
+            will-change: transform; 
+        }
         @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-200%); } }
         #network-map { flex-grow: 1; background: #ffffff; width: 100%; }
         #nexus-menu { position: fixed; bottom: 20px; left: 20px; z-index: 9999; }
-        .nexus-btn { background: #1c5982; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; border: 1px solid #34495e; }
+        .nexus-btn { background: #1c5982; color: white; border: 1px solid #34495e; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
         .nexus-content { display: none; position: absolute; bottom: 55px; left: 0; background: #0d1117; width: 230px; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; }
-        .nexus-content a, .nexus-content button { color: #58a6ff; padding: 12px; text-decoration: none; display: block; border: none; font-size: 13px; background: none; width: 100%; text-align: left; cursor: pointer; border-bottom: 1px solid #21262d; }
-        .nexus-content button:hover { background: #161b22; }
+        .nexus-content a, .nexus-content button { color: #58a6ff; padding: 12px; text-decoration: none; display: block; border-bottom: 1px solid #21262d; font-size: 13px; background: none; width: 100%; text-align: left; cursor: pointer; border-left:none; border-right:none; border-top:none; }
         .show { display: block; }
         .dev-header { background: #1c5982; color: white; padding: 8px; font-size: 10px; font-family: monospace; }
-        .dev-tag { color: #3498db; display: block; padding: 4px 12px; font-size: 11px; font-weight: bold; }
-        /* Terminal Styling */
-        #debug-terminal { display:none; position:fixed; top:45px; left:0; width:100%; height:30%; background:rgba(0,0,0,0.9); color:#00ff00; font-family:monospace; font-size:11px; overflow-y:auto; z-index:10000; padding:10px; border-bottom:2px solid #e67e22; }
+        #debug-terminal { display:none; position:fixed; top:45px; left:0; width:100%; height:30%; background:rgba(0,0,0,0.95); color:#00ff00; font-family:monospace; font-size:11px; overflow-y:auto; z-index:10000; padding:10px; border-bottom:2px solid #e67e22; }
     </style>
 </head>
 <body>
-    <div id="ticker-wrap"><div class="ticker">[MAR 9] JMAIL RESTORATION ACTIVE --- LUTNICK/BONDI NODES VERIFIED --- TRADE ENVOY FILES LIVE ---</div></div>
-    
-    <div id="network-map"></div>
 
-    <div id="debug-terminal"><div>[NEXUS DEBUG LOG ACTIVE]</div></div>
- 
-    <div id="nexus-menu">
-        <div style="margin-bottom: 10px; display: flex; gap: 8px;">
-            <button onclick="loadProgram('network')" class="nexus-btn" style="background: #2c3e50;">🕸️ JMail</button>
-            <button onclick="loadProgram('andrew')" class="nexus-btn" style="background: #2c3e50;">🧭 Andrew</button>
-        </div>
+<<div id="debug-terminal" style="background:#000; color:#00ff00; font-family:monospace; font-size:11px; padding:15px; height:180px; overflow-y:auto; border-bottom:3px solid #e67e22; z-index:10001; position:relative;">
+    <div>[NEXUS v5.1 SYSTEM BOOT]</div>
+</div>
 
-        <button onclick="document.getElementById('dev_Dropdown').classList.toggle('show')" class="nexus-btn">dev</button>
-      
-        <div id="dev_Dropdown" class="nexus-content">
-            <div class="dev-header">panel
-            <span class="dev-tag">System Tools</span>
-            
-            <a href="./netlify_html/dev/univ_scale.html">📊 Universal Scaler</a>
-            <a href="./netlify_html/dev/audio_analysis.html">🎙️ Audio Analysis</a>
+<div id="ticker-wrap"><div class="ticker">[MAR 9] JMAIL RESTORATION ACTIVE --- CACHE BUSTER ENABLED ---</div></div>
 
-            <hr style="border:0; border-top:1px solid #333; margin:0;">
-            
-            <button onclick="toggleDebug()" style="color:#e67e22;">📟 Toggle Console</button>
-            <button onclick="toggleMainEvent()" style="color:#f1c40f;">👁️ Toggle Display</button>
-            <button onclick="document.getElementById('dev_Dropdown').classList.remove('show')" style="color:#e74c3c;">Close</button>
-        </div>
+<div id="network-map" style="flex-grow:1; background:#fff;"></div>
+
+<div id="nexus-menu">
+    <div style="margin-bottom: 10px; display: flex; gap: 8px;">
+        <button onclick="window.loadProgram('network')" class="nexus-btn" style="background: #2c3e50;">🕸️ Master</button>
+        <button onclick="window.loadProgram('andrew')" class="nexus-btn" style="background: #2c3e50;">🧭 Andrew</button>
     </div>
-    
-    
-    <script type="module">
-    // Safety Toggle & Display
+    <button onclick="document.getElementById('dev_Dropdown').classList.toggle('show')" class="nexus-btn">dev</button>
+    <div id="dev_Dropdown" class="nexus-content">
+        <a href="netlify_html/dev/univ_scale.html">📊 Universal Scaler</a>
+        <button onclick="window.toggleMainEvent()" style="color:#f1c40f;">👁️ Toggle Display</button>
+    </div>
+</div>
+
+<script type="module">
     const term = document.getElementById('debug-terminal');
-    window.toggleDebug = () => term.style.display = (term.style.display === 'none' ? 'block' : 'none');
-    
-    // Redirect logs
-    console.log = (msg) => {
+
+    window.console.log = function(msg) {
         if (typeof msg === 'string' && msg.includes('ResizeObserver')) return;
-        term.innerHTML += `<div>> ${msg}</div>`;
+        const line = document.createElement('div');
+        line.innerHTML = `> ${msg}`;
+        term.appendChild(line);
         term.scrollTop = term.scrollHeight;
     };
 
-    // Attempting the imports with error catching
+    window.toggleMainEvent = function() {
+        const el = document.getElementById('network-map');
+        if(el) el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+    };
+
+    // THE CACHE-BUSTER LOADER
     window.loadProgram = async function(prog) {
-        console.log("Requesting: " + prog);
+        // Generates a unique string like ?t=1709999999
+        const buster = "?t=" + new Date().getTime();
+        const fileName = (prog === 'network') ? 'network.js' : 'andrew_trade.js';
+        const fullUrl = `./netlify_html/active/${fileName}${buster}`;
+        
+        console.log("Fetching fresh: " + fileName);
+        
         try {
-            if (prog === 'network') {
-                const { initNetwork } = await import('./netlify_html/active/network.js');
-                initNetwork('network-map');
-            }
-            if (prog === 'andrew') {
-                const { initAndrew } = await import('./netlify_html/active/andrew_trade.js');
-                initAndrew('network-map');
-            }
-        } catch (e) {
-            console.log("<span style='color:red'>FILE ERROR: Check paths/case sensitivity. " + e.message + "</span>");
+            const module = await import(fullUrl);
+            if (prog === 'network') module.initNetwork('network-map');
+            if (prog === 'andrew') module.initAndrew('network-map');
+            console.log("<span style='color:cyan'>SUCCESS: " + prog + " is live.</span>");
+        } catch (err) {
+            console.log("<span style='color:#ff4444;'>FETCH FAILED:</span> " + err.message);
+            // This will show exactly where the browser is looking
+            console.log("Path attempted: " + fullUrl);
         }
     };
 
     window.addEventListener('load', () => {
-        console.log("Nexus v4.9.3: Permissions Check...");
-        window.loadProgram('network');
+        console.log("Syncing with GitHub Pages...");
+        window.loadProgram('network'); 
     });
 </script>
 
